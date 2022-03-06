@@ -1,0 +1,78 @@
+{"get":"fixtures","parameters":{"league":"61","season":"2021","team":"94","next":"1"},
+"errors": [],
+"results": 1,
+"paging": {
+    "current": 1,
+    "total": 1
+},
+"response": [
+    {
+        "fixture": {
+            "id": 718619,
+            "referee": "B. Millot",
+            "timezone": "UTC",
+            "date": "2022-03-06T14: 00: 00+00: 00",
+            "timestamp": 1646575200,
+            "periods": {
+                "first": null,
+                "second": null
+            },
+            "venue": {
+                "id": 680,
+                "name": "Roazhon Park",
+                "city": "Rennes"
+            },
+            "status": {
+                "long": "Not Started",
+                "short": "NS",
+                "elapsed": null
+            }
+        },
+        "league": {
+            "id": 61,
+            "name": "Ligue 1",
+            "country": "France",
+            "logo": "https:\/\/media.api-sports.io\/football\/leagues\/61.png",
+            "flag": "https:\/\/media.api-sports.io\/flags\/fr.svg",
+            "season": 2021,
+            "round": "Regular Season - 27"
+        },
+        "teams": {
+            "home": {
+                "id": 94,
+                "name": "Rennes",
+                "logo": "https:\/\/media.api-sports.io\/football\/teams\/94.png",
+                "winner": null
+            },
+            "away": {
+                "id": 77,
+                "name": "Angers",
+                "logo": "https:\/\/media.api-sports.io\/football\/teams\/77.png",
+                "winner": null
+            }
+        },
+        "goals": {
+            "home": null,
+            "away": null
+        },
+        "score": {
+            "halftime": {
+                "home": null,
+                "away": null
+            },
+            "fulltime": {
+                "home": null,
+                "away": null
+            },
+            "extratime": {
+                "home": null,
+                "away": null
+            },
+            "penalty": {
+                "home": null,
+                "away": null
+            }
+        }
+    }
+]
+}
