@@ -1,22 +1,38 @@
 <?php
 
-namespace App\SoccerApi;
+namespace App\SoccerDataApi;
 
-use App\Contracts\SoccerDataApi;
+use App\Contracts\SoccerDataApiInterface;
 
 /**
  * Setup the query for api-football.com API
  */
-class ApiFootball implements SoccerDataApi
+class ApiFootball implements SoccerDataApiInterface
 {
-    final protected const QUESTION_MARK= '?'; 
+ 
+    private $auth_key_name = null;
+    private $auth_key_value = null;
 
-    /*protected string $api_key;
-
-    public function __construct(string $api_key)
+/*
+    function __construct(App $app)
     {
-        $this->api_key = $api_key;
-    }*/
+        $this->app = $app;
+    }
+*/
+    function __construct(array $provider)
+    {
+        //dd($provider);
+        $this->auth_key_name = $provider['auth_key_name'];
+        $this->auth_key_value = $provider['auth_key_value'];
+    }
+
+    public function getAuthKeys(): array
+    {
+        return [
+            'key_name' => $this->auth_key_name, 
+            'key_value' =>$this->auth_key_value
+        ];
+    }
 
 
     /**
@@ -610,8 +626,12 @@ class ApiFootball implements SoccerDataApi
      *       WO : WalkOver
      *       LIVE : In Progress 
      */
-    public function getFixtureH2HByMixedFilters(string $h2h, array $filters): string
+    public function getFixtureH2HByMixedFilters(array $filters): string
     {
+        if(!$filters['h2h']){
+            return '"h2h" filter is required for getFixtureH2HByMixedFilters()';
+        }
+
         $fixtures_h2h_mixed_filters = 
             array(
                 'h2h' => null, 
@@ -626,8 +646,6 @@ class ApiFootball implements SoccerDataApi
                 'season' => null
             )
         ;
-
-        $filters['h2h'] = $h2h;
 
         return $this->getFixturesH2H(). 
             http_build_query(
@@ -731,8 +749,12 @@ class ApiFootball implements SoccerDataApi
      * get("https://v3.football.api-sports.io/fixtures/events?fixture=215662&player=35845&type=card");
      * get("https://v3.football.api-sports.io/fixtures/events?fixture=215662&team=463&type=goal&player=35845");
      */
-    public function getFixtureEventsByMixedFilters(int $fixture_id, array $filters): string
+    public function getFixtureEventsByMixedFilters(array $filters): string
     {
+        if(!$filters['fixture']){
+            return '"fixture" filter is required for getFixtureEventsByMixedFilters()';
+        }
+
         $fixture_events_mixed_filters = 
             array(
                 'fixture' => null, 
@@ -741,8 +763,6 @@ class ApiFootball implements SoccerDataApi
                 'team' => null
             )
         ;
-
-        $filters['fixture'] = $fixture_id;
 
         return $this->getFixtureEvents(). 
             http_build_query(
@@ -816,9 +836,15 @@ class ApiFootball implements SoccerDataApi
      * It’s possible to make requests by mixing the available parameters
      * get("https://v3.football.api-sports.io/fixtures/lineups?fixture=215662&player=35845&type=startXI");
      * get("https://v3.football.api-sports.io/fixtures/lineups?fixture=215662&team=463&type=startXI&player=35845");
+     * 
+     * @param array $filters. $filters= array['fixture' => 1234, 'type' => 'Formation'];
      */
-    public function getFixtureLineupsEventsByMixedFilters(int $fixture_id, array $filters): string
+    public function getFixtureLineupsEventsByMixedFilters(array $filters): string
     {
+        if(!$filters['fixture']){
+            return '"fixture" filter is required for getFixtureLineupsEventsByMixedFilters()';
+        }
+
         $fixture_lineups_mixed_filters = 
             array(
                 'fixture' => null, 
@@ -827,8 +853,6 @@ class ApiFootball implements SoccerDataApi
                 'team' => null
             )
         ;
-
-        $filters['fixture'] = $fixture_id;
 
         return $this->getFixtureEvents(). 
             http_build_query(

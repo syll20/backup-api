@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Football;
+use App\Http\Controllers\CalendarController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/football', [Football::class, 'getFixture']);
+
+Route::get('/list', [CalendarController::class, 'index']);
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
