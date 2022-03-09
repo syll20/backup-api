@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\FixtureController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,7 +24,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/list', [CalendarController::class, 'index']);
+Route::get('/list', [FixtureController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
