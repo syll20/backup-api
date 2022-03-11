@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Contracts\SoccerDataApiInterface;
-use App\SoccerDataApi\SoccerDataApiManager;
 use Illuminate\Support\ServiceProvider;
 use InvalidArgumentException;
 
@@ -29,7 +28,7 @@ class SoccerDataApiServiceProvider extends ServiceProvider
         $this->app->singleton(SoccerDataApiInterface::class, function ($app) {
             $provider = $this->setup();
             var_dump('singleton');
-            return new $provider['driver']($provider);
+            return new $provider['namespace']($provider);
         });
     }
 
@@ -56,7 +55,7 @@ class SoccerDataApiServiceProvider extends ServiceProvider
     protected function getConfig($name)
     {
         if (! is_null($name) && $name !== 'null') {
-            return $this->app['config']["soccerdataapi.providers.{$name}"];
+            return $this->app['config']["soccerdataapi.servers.{$name}"];
         }
 
         return ['driver' => 'null'];

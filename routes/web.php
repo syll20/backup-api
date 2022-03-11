@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/lists', [FixtureController::class, 'index'])->name('lists');
 Route::get('/lists/{fixture}', [FixtureController::class, 'show'])->name('show');
 Route::get('/create',  [FixtureController::class, 'create'])->name('create');
+Route::post('/generate',  [FixtureController::class, 'store'])->name('generate');
             
 
 

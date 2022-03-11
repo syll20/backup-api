@@ -1,13 +1,13 @@
 <?php
 
-namespace App\SoccerDataApi;
+namespace App\Api\V1;
 
 use App\Contracts\SoccerDataApiInterface;
 
 /**
  * Setup the query for api-football.com API
  */
-class ApiFootball implements SoccerDataApiInterface
+class ApiFootballCom implements SoccerDataApiInterface
 {
  
     private $auth_key_name = null;
