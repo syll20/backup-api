@@ -19,7 +19,7 @@ class Calendar extends Model
         'kickoff',
     ];
 
-    public function fixture()
+    public function fixtures()
     {
         return $this->hasMany(Fixture::class);
     }

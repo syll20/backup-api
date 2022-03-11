@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\FixtureController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,14 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 
 
+Route::get('/lists', [FixtureController::class, 'index'])->name('lists');
+Route::get('/lists/{fixture}', [FixtureController::class, 'show'])->name('show');
+Route::get('/create',  [FixtureController::class, 'create'])->name('create');
+            
 
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-
-Route::get('/list', [FixtureController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

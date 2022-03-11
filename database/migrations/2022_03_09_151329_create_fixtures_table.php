@@ -17,8 +17,9 @@ return new class extends Migration
     {
         Schema::create('fixtures', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Calendar::class);
+            $table->foreignIdFor(Calendar::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(User::class);
+            $table->mediumText('template');
             $table->timestamps();
         });
     }

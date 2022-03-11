@@ -31,6 +31,7 @@ class FixtureFactory extends Factory
         return [
             'user_id' => User::factory(),
             'calendar_id' => Calendar::factory(),
+            'template' => $this->faker->paragraph(),
         ];
     }
 }

@@ -45,15 +45,11 @@
                                                 <div class="text-sm text-gray-500">{{$fixture->created_at->diffForHumans()}}</div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="/list" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                                <a href="/list" class="text-indigo-600 hover:text-indigo-900">{{ __('Edit') }}</a>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            {{--  <a href="/list" class="text-indigo-600 hover:text-indigo-900">Delete</a>--}}
-                                            <form method="POST" action="/list">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="text-indigo-600 hover:text-indigo-900">Show</button>
-                                            </form>
+                                            <a href="/lists/{{ $fixture->id }}" class="text-indigo-600 hover:text-indigo-900">{{ __('Show') }}</a>
+                                            
                                             </td>
                                         </tr>
                                     @endforeach
