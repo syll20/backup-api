@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreFixtureRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class StoreFixtureRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::check();
     }
 
     /**
@@ -24,7 +25,7 @@ class StoreFixtureRequest extends FormRequest
     public function rules()
     {
         return [
-            'game_date' => 'required|date_format:"Y-m-d"',
+            'date' => ['required', 'date_format:"Y-m-d"'],
         ];
     }
 }

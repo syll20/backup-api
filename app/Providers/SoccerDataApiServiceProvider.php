@@ -26,21 +26,21 @@ class SoccerDataApiServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->singleton(SoccerDataApiInterface::class, function ($app) {
-            $provider = $this->setup();
+            $server_config = $this->setup();
             var_dump('singleton');
-            return new $provider['namespace']($provider);
+            return new $server_config['namespace']($server_config);
         });
     }
 
     
     public function setup($name = null)
     {
-        $this->provider = $name ?: $this->getDefaultProvider();
+        $this->server = $name ?: $this->getDefaultProvider();
 
-        $config = $this->getConfig($this->provider);
+        $config = $this->getConfig($this->server);
 
         if (is_null($config)) {
-            throw new InvalidArgumentException("The [{$name}] provider has not been configured.");
+            throw new InvalidArgumentException("The [{$name}] server has not been configured.");
         }
 
         return $config;

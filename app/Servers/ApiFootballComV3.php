@@ -1,17 +1,34 @@
 <?php
 
-namespace App\Api\V1;
+namespace App\Servers;
 
 use App\Contracts\SoccerDataApiInterface;
 
 /**
  * Setup the query for api-football.com API
  */
-class ApiFootballCom implements SoccerDataApiInterface
+class ApiFootballComV3 implements SoccerDataApiInterface
 {
  
     private $auth_key_name = null;
     private $auth_key_value = null;
+    public $base_url = null;
+
+    public $fixtures_mixed_filters = 
+        [
+            'date' => null, 
+            'league' => null, 
+            'season' => null, 
+            'next' => null, 
+            'last' => null, 
+            'team' => null, 
+            'status' => null, 
+            'timezone' => null, 
+            'from' => null, 
+            'to' => null,
+            'round' => null
+        ]
+    ;
 
 /*
     function __construct(App $app)
@@ -19,21 +36,22 @@ class ApiFootballCom implements SoccerDataApiInterface
         $this->app = $app;
     }
 */
-    function __construct(array $provider)
+    function __construct(array $server)
     {
         //dd($provider);
-        $this->auth_key_name = $provider['auth_key_name'];
-        $this->auth_key_value = $provider['auth_key_value'];
+        $this->auth_key_name = $server['auth_key_name'];
+        $this->auth_key_value = $server['auth_key_value'];
+        $this->base_url = $server['base_url'];
     }
 
     public function getAuthKeys(): array
     {
         return [
-            'key_name' => $this->auth_key_name, 
-            'key_value' =>$this->auth_key_value
+            $this->auth_key_name => $this->auth_key_value
         ];
     }
 
+    
 
     /**
      *  COUNTRIES 
@@ -398,7 +416,7 @@ class ApiFootballCom implements SoccerDataApiInterface
       * Get all Standings from one {league} & {season}
       * get("https://v3.football.api-sports.io/standings?league=39&season=2019");
       */
-    public function getStandingsByLeagueAndSeason(int $season_id, int $league_id): string
+    public function getStandingsByLeagueAndSeason(int $league_id, int $season_id): string
     {
         return $this->getStandings() . 
             http_build_query([
@@ -535,7 +553,7 @@ class ApiFootballCom implements SoccerDataApiInterface
      */
     public function getLastFixtures(int $last= 10): string
     {
-        return $this->getFixtures() .  http_build_query(['last' => $last]);
+        return $this->getFixtures() . http_build_query(['last' => $last]);
     }
 
     /**
@@ -550,25 +568,9 @@ class ApiFootballCom implements SoccerDataApiInterface
      */
     public function getFixturesByMixedFilters(array $filters): string
     {
-        $fixtures_mixed_filters = 
-            array(
-                'date' => null, 
-                'league' => null, 
-                'season' => null, 
-                'next' => null, 
-                'last' => null, 
-                'team' => null, 
-                'status' => null, 
-                'timezone' => null, 
-                'from' => null, 
-                'to' => null,
-                'round' => null
-            )
-        ;
-
         return $this->getFixtures(). 
             http_build_query(
-                array_intersect_key($filters, $fixtures_mixed_filters)
+                array_intersect_key($filters, $this->fixtures_mixed_filters)
             )
         ;
     }
@@ -628,7 +630,7 @@ class ApiFootballCom implements SoccerDataApiInterface
      */
     public function getFixtureH2HByMixedFilters(array $filters): string
     {
-        if(!$filters['h2h']){
+        if(! isset($filters['h2h'])){
             return '"h2h" filter is required for getFixtureH2HByMixedFilters()';
         }
 
@@ -751,7 +753,7 @@ class ApiFootballCom implements SoccerDataApiInterface
      */
     public function getFixtureEventsByMixedFilters(array $filters): string
     {
-        if(!$filters['fixture']){
+        if(! isset($filters['fixture'])){
             return '"fixture" filter is required for getFixtureEventsByMixedFilters()';
         }
 
@@ -841,7 +843,7 @@ class ApiFootballCom implements SoccerDataApiInterface
      */
     public function getFixtureLineupsEventsByMixedFilters(array $filters): string
     {
-        if(!$filters['fixture']){
+        if(! isset($filters['fixture'])){
             return '"fixture" filter is required for getFixtureLineupsEventsByMixedFilters()';
         }
 

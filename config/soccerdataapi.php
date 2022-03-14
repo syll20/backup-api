@@ -30,14 +30,12 @@ return [
     /                       "football-data.org"
     |
     */
-/*
-    Headers([
-        'x-apisports-key' => 'fdf1ff3c4f0ddfa001f0e3b223c9ce80'
-*/
+
     'servers' => [
 
         'api-football' => [
-            'namespace' => 'App\Api\V1\ApiFootballCom',
+            'namespace' => 'App\Servers\ApiFootballComV3',
+            'base_url' => 'https://v3.football.api-sports.io',
             'auth_key_name' => env('API_FOOTBALL_KEY_NAME', 'x-apisports-key'),
             'auth_key_value' => env('API_FOOTBALL_KEY_VALUE', 'fdf1ff3c4f0ddfa001f0e3b223c9ce80'),
         ],
