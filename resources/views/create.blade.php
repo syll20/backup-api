@@ -32,7 +32,7 @@
                                 @csrf
                                 <input type=hidden name="team" value="94" />
                                 <select name="date" id="game_date" required>
-                                    <option value="2022-03-13">Lyon-Rennes (13 mars 2022)</option>
+                                    <option value="2022-03-20">Rennes-Metz (20 mars 2022)</option>
                                     @if(isset($next_games['response']))
                                         @foreach($next_games['response'] as $next_game)
                                             <option value="{{ date('Y-m-d', $next_game['fixture']['timestamp']) }}">
@@ -63,6 +63,10 @@
                                         <div><input type="checkbox" name="placeholders[]" value="away_team_injuries" checked /> %away_team_injuries</div>
                                         <div><input type="checkbox" name="placeholders[]" value="general_home_ranking" checked /> %general_home_ranking</div>
                                         <div><input type="checkbox" name="placeholders[]" value="general_away_ranking" checked /> %general_away_ranking</div>
+                                        <div><input type="checkbox" name="placeholders[]" value="general_home_points" checked /> %general_home_points</div>
+                                        <div><input type="checkbox" name="placeholders[]" value="general_away_points" checked /> %general_away_points</div>
+                                        <div><input type="checkbox" name="placeholders[]" value="general_home_goalaverage" checked /> %general_home_goalaverage</div>
+                                        <div><input type="checkbox" name="placeholders[]" value="general_away_goalaverage" checked /> %general_away_goalaverage</div>
                                 </div>
                                 <br><input type="submit" value="{{ __('Submit') }}" />
                             </form>

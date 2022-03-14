@@ -57,26 +57,15 @@ class CentralStation
     private function competition()
     {
         var_dump("Dans function competition<br>");
-
-        /*if(! isset($this->fixtures))
-        {
-            var_dump("IL N'Y A PAS DE FIXTURE");
-            $this->fixtures = $this->loadFixtures();
-        }*/
         $this->loadFixtures();
         //dd($this->fixtures);
+
         return $this->fixtures->league->name;
     }
 
     private function round()
     {
         var_dump("Dans function round<br>");
-
-        /*if(! isset($this->fixtures))
-        {
-            var_dump("IL N'Y A PAS DE FIXTURE");
-           $this->fixtures = $this->loadFixtures();
-        }*/
         $this->loadFixtures();
 
         $tmp = explode('-', $this->fixtures->league->round);
@@ -89,12 +78,6 @@ class CentralStation
     private function dateTime()
     {
         var_dump("Dans function dateTime<br>");
-
-        /*if(! isset($this->fixtures))
-        {
-            var_dump("IL N'Y A PAS DE FIXTURE");
-           $this->fixtures = $this->loadFixtures();
-        }*/
         $this->loadFixtures();
 
         return (new IntlDateFormatter(
@@ -112,14 +95,7 @@ class CentralStation
     private function venue()
     {
         var_dump("Dans function venue<br>");
-
-        /*if(! isset($this->fixtures))
-        {
-            var_dump("IL N'Y A PAS DE FIXTURE");
-            $this->fixtures = $this->loadFixtures();
-        }*/
         $this->loadFixtures();
-        //dd($this->fixtures->league->name);
         return $this->fixtures->fixture->venue->name;
     }
 
@@ -128,12 +104,7 @@ class CentralStation
      */
     private function homeTeamLogo($where = 'home')
     {
-        /*if(! isset($this->fixtures))
-        {
-            $this->fixtures = $this->loadFixtures();
-        }*/
         $this->loadFixtures();
-
         return $this->fixtures->teams->$where->logo;
     }
 
@@ -148,16 +119,7 @@ class CentralStation
     private function referee()
     {
         var_dump("Dans function referee<br>");
-
-        /*if(! isset($this->fixtures))
-        {
-            var_dump("IL N'Y A PAS DE FIXTURE");
-            $this->fixtures = $this->loadFixtures();
-        }*/
-
         $this->loadFixtures();
-
-        //dd($this->fixtures->league->name);
         return $this->fixtures->fixture->referee;
     }
 
@@ -168,27 +130,19 @@ class CentralStation
     {
         var_dump("Dans function homeTeamInjuries<br>");
 
-        if(! isset($this->injuries))
-        {
-            var_dump("IL N'Y A PAS DE INJURIES");
-            $this->injuries = $this->loadInjuries();
-        }
-        if(! isset($this->fixtures))
-        {
-            var_dump("IL N'Y A PAS DE FIXTURE");
-            $this->fixtures = $this->loadFixtures();
-        }
+        $this->loadInjuries();
+        $this->loadFixtures();
 
-        $tmp = [];
+        $list = [];
 
         foreach($this->injuries as $injurie)
         {
             if($injurie->team->id == $this->fixtures->teams->$where->id)
             {
-                $tmp[] = $injurie->player->name;
+                $list[] = $injurie->player->name;
             }
          }
-        return implode(", ", $tmp); 
+        return implode(", ", $list); 
     }
 
     private function awayTeamInjuries()
@@ -202,42 +156,95 @@ class CentralStation
     private function generalHomeRanking($where = 'home')
     {
         var_dump("Dans function generalHomeRanking<br>");
-
-        if(! isset($this->standings))
-        {
-            var_dump("IL N'Y A PAS DE STANDINGS");
-            $this->standings = $this->loadStandings();
-        }
-        if(! isset($this->fixtures))
-        {
-            var_dump("IL N'Y A PAS DE FIXTURE");
-            $this->fixtures = $this->loadFixtures();
-        }
-
-        foreach($this->standings as $key => $standing)
-        {
-            dd($standing['team']->name);
-            if($standing[$key]['team']->id == $this->fixtures->teams->$where->id)
-            {
-                return  $standing[$key]->rank;
-            }
-        }
-        //dd($this->fixtures->league->name);
-        //return $this->standinggs->fixture->referee;
-        return "?";
-    } 
-
+        return $this->standings($where, 'rank'); 
+    }
 
     private function generalAwayRanking()
     {
         return $this->generalHomeRanking('away');
-    } 
+    }
+
+    private function generalHomePoints($where = 'home')
+    {
+        var_dump("Dans function generalHomePoints<br>");
+        return $this->standings($where, 'points'); 
+    }
+
+    private function generalAwayPoints()
+    {
+        return $this->generalHomePoints('away');
+    }
+
+    private function generalHomeGoalaverage($where = 'home')
+    {
+        var_dump("Dans function generalHomeGoalaverage<br>");
+        return sprintf("%+d", $this->standings($where, 'goalsDiff'));
+    }
+
+    private function generalAwayGoalaverage()
+    {
+        return $this->generalHomeGoalaverage('away');
+    }
+
+
+    private function homeTeamRanking($where = 'home')
+    {
+        //$tmp = $this->standings($where, $where);
+        // return $tmp['']
+
+        /**
+         * Boucle sur $this->standings
+         * 
+         *      Enregistre pour chaque équipe le classement
+         *          
+         *          À domicile
+         *          À l'extérieur
+         * 
+         *                      Win
+         *                      Draw
+         *                      Lose
+         *                      Goals
+         *                          For
+         *                          Against
+         * 
+         *  Puis trier
+         * Et déterminer le classement de team_home + team_away
+         * 
+         *          Peut-être besoin d'un loadAllStandings()
+         *          Avec:
+         *              https://v3.football.api-sports.io/standings?season=2021&league=61
+         */
+    }
+
+    private function awayTeamRanking()
+    {
+        return $this->awayTeamRanking('away');
+    }
+
+    private function standings($where, $field)
+    {
+        $this->loadStandings();
+        $this->loadFixtures();
+
+        foreach($this->standings as $standing)
+        {
+            if($standing->team->id == $this->fixtures->teams->$where->id)
+            {
+                return  $standing->$field;
+            }
+        }
+        return "-";
+    }
 
 
 
 
     private function loadInjuries()
     {
+        if(isset($this->injuries)){
+            return;
+        }
+
         $this->endpoint = $this->soccerDataApi->getInjuriesByFixture($this->fixtures->fixture->id);
 
         return $this->callServer();
@@ -245,6 +252,11 @@ class CentralStation
 
     private function loadStandings()
     {
+        if(isset($this->standings)){
+            return;
+        }
+        var_dump("IL N'Y A PAS DE STANDINGS");
+
         $this->endpoint = $this->soccerDataApi->getStandingsByLeagueAndSeason(
             $this->fixtures->league->id, 
             $this->fixtures->league->season
@@ -252,7 +264,7 @@ class CentralStation
 
         $tmp = $this->callServer();
         //dd($tmp[0]->league->standings);
-        return $tmp[0]->league->standings;
+        $this->standings = $tmp[0]->league->standings[0];
     }
 
 
