@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Contracts\SoccerDataApiInterface;
 use App\Http\Requests\StoreFixtureRequest;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -43,6 +44,7 @@ class CentralStation
             $functionName = Str::camel($placeholder);
 
             if (method_exists($this, $functionName)) {
+                var_dump($placeholder . ": ". $functionName ."<br>");
                 $this->template = str_replace("%".$placeholder, $this->$functionName(), $this->template);
             }
         }
@@ -58,7 +60,6 @@ class CentralStation
     {
         var_dump("Dans function competition<br>");
         $this->loadFixtures();
-        //dd($this->fixtures);
 
         return $this->fixtures->league->name;
     }
@@ -187,6 +188,53 @@ class CentralStation
     }
 
 
+    private function homeTeamWdl($where = 'home')
+    {
+        var_dump("Dans function homeTeamWdl<br>");
+        $games = $this->standings($where, $where);
+        //dd(sprintf("%dV- %dN - %dD", $games->win, $games->draw, $games->lose));
+        return sprintf("%dV- %dN - %dD", $games->win, $games->draw, $games->lose);
+    }
+    
+    private function awayTeamWdl($where = 'away')
+    {
+        var_dump("Dans function awayTeamWdl<br>");
+        return $this->homeTeamWDL('away');
+
+        //dd($tmp);
+    }
+
+    private function homeTeamPoints($where = 'home')
+    {
+        var_dump("Dans function homeTeamPoints<br>");
+        $games = $this->standings($where, $where);
+
+        var_dump(($games->win *3 + $games->draw));
+        return  ($games->win *3 + $games->draw);
+    }
+
+    private function awayTeamPoints()
+    {
+        var_dump("Dans function awayTeamPoints<br>");
+        return $this->homeTeamPoints('away');
+    }
+    
+
+    private function homeTeamGoalaverage($where = 'home')
+    {
+        var_dump("Dans function homeTeamGoalaverage<br>");
+        $games = $this->standings($where, $where);
+
+        var_dump(($games->goals->for - $games->goals->against));
+        return  sprintf("%+d", $games->goals->for - $games->goals->against);
+    }
+
+    private function awayTeamGoalaverage()
+    {
+        var_dump("Dans function awayTeamGoalaverage<br>");
+        return $this->homeTeamGoalaverage('away');
+    }
+
     private function homeTeamRanking($where = 'home')
     {
         //$tmp = $this->standings($where, $where);
@@ -220,6 +268,7 @@ class CentralStation
     {
         return $this->awayTeamRanking('away');
     }
+
 
     private function standings($where, $field)
     {
@@ -293,16 +342,23 @@ class CentralStation
 
     private function callServer()
     {
-        $url = filter_var($this->soccerDataApi->base_url . $this->endpoint, FILTER_SANITIZE_URL);
-
-        if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-            print "URL OK on appel l'api avec " . $url;
-            $data = Http::acceptJson()
-                ->withHeaders($this->soccerDataApi->getAuthKeys())
-                ->get($url);
+        if (cache::has($this->endpoint))
+        {
+            return cache::get($this->endpoint);
         }
+
+        $url = filter_var($this->soccerDataApi->baseUrl . $this->endpoint, FILTER_SANITIZE_URL);
+        print "URL OK on appel l'api avec " . $url;
+        $data = Http::acceptJson()
+            ->withHeaders($this->soccerDataApi->getAuthKeys())
+            ->get($url);
+    
+
+
         $data = json_decode(json_encode($data['response']), FALSE);
 
+        cache($this->endpoint, $data, now()->addMinutes(10));
+        
         return $data;
     }
 

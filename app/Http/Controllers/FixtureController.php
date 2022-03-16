@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+require_once __DIR__.'/../../../vendor/autoload.php';
+
+
 use App\Actions\Fixtures;
 use App\Actions\MainAction;
 use App\Contracts\SoccerDataApiInterface;
@@ -9,9 +12,15 @@ use App\Http\Requests\StoreFixtureRequest;
 use App\Models\Fixture;
 use App\Services\Api;
 use App\Services\CentralStation;
-use Illuminate\Http\Request;
+use GuzzleHttp\Client as GuzzleClient;
+use Goutte\Client;
+
+use Symfony\Component\BrowserKit\HttpBrowser;
+
+//use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class FixtureController extends Controller
 {
@@ -102,6 +111,105 @@ class FixtureController extends Controller
 
         //$action->handle('fixtures');
         //$action->handle();
+
+
+        //$home = array();
+        /*$home[91] = 41;
+        $home[94] = 54;
+        $home[92] = 42;
+        arsort($home);*/
+        
+        $home = array();
+        $home['points'][91] = 41;
+        $home['diff'][91] = 15;
+
+        $home['points'][94] = 54;
+        $home['diff'][94] = 5;
+
+        $home['points'][92] = 41;
+        $home['diff'][92] = 17;
+
+        /*
+        $ar = array(
+            array("10", 11, 100, 100, "a"),
+            array(   1,  2, "2",   3,   1)
+           );
+
+        array_multisort($home['points'], SORT_DESC, SORT_NUMERIC,
+                        $home['diff'], SORT_NUMERIC, SORT_DESC);
+
+*/
+/*
+$waiters[76] = array('points' => 67, 'diff' => 1);
+$waiters[14] = array('points' => 41, 'diff' => 2);
+$waiters[58] = array('points' => 85, 'diff' => 3);
+$waiters[89] = array('points' => 98, 'diff' => 4);
+$waiters[68] = array('points' => 85, 'diff' => 5);
+$waiters[31] = array('points' => 13, 'diff' => 6);
+
+foreach ($waiters as $id => $waiter) {
+    $points[$id]        = $waiter['points'];
+    $diff[$id]   = $waiter['diff'];
+
+}
+
+$keys = array_keys($waiters);
+array_multisort(
+    $points, SORT_DESC, SORT_NUMERIC,
+    $diff, SORT_DESC, SORT_NUMERIC ,
+    $waiters, $keys
+);
+//$waiters = array_combine($keys, $waiters);
+
+        dd($waiters);
+        
+        */
+
+        /*
+        $goutteClient = new Client();
+        $guzzleClient = new GuzzleClient(array(
+            'timeout' => 60,
+            'verify' => false
+        ));
+        $goutteClient->setClient($guzzleClient);
+        //setClient($guzzleClient);
+        $crawler = $goutteClient->request('GET', 'https://www.maxifoot.fr/calendrier-ligue-1-france-2021-2022.htm');
+        dd($crawler);
+        $crawler->filter('.cald1 .cd1')->each(function ($node) {
+            dd($node->text());
+        });
+
+*/
+
+if (Storage::disk('local')->exists('public/exemple.txt')) {
+    $content = Storage::get('public/example.txt');
+}else{
+    print "<br>GUZZLE<br>";
+    $guzzleClient = new GuzzleClient(array(
+        'timeout' => 60,
+        'verify' => false
+    ));
+
+    $response = $guzzleClient->get('https://www.maxifoot.fr/calendrier-ligue-1-france-2021-2022.htm');
+    $content = $response->getBody()->getContents();
+    Storage::disk('local')->put('public/example.txt', $content);
+}
+//dd($content);
+
+/**
+ *  1. Sauve la page dans un fixhier
+ *  2. Lire le fichier
+ *  3. Installer SimpleDom
+ *  4. Essayer ça: $ret = $html->find('table[class=cd1]'); 
+ * 
+ * 
+ */
+
+
+
+
+        dd('stop');
+
         $central->handle();
 
     }

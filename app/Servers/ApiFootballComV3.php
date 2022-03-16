@@ -39,15 +39,15 @@ class ApiFootballComV3 implements SoccerDataApiInterface
     function __construct(array $server)
     {
         //dd($provider);
-        $this->auth_key_name = $server['auth_key_name'];
-        $this->auth_key_value = $server['auth_key_value'];
-        $this->base_url = $server['base_url'];
+        $this->authKeyName = $server['auth_key_name'];
+        $this->authKeyValue = $server['auth_key_value'];
+        $this->baseUrl = $server['base_url'];
     }
 
     public function getAuthKeys(): array
     {
         return [
-            $this->auth_key_name => $this->auth_key_value
+            $this->authKeyName => $this->authKeyValue
         ];
     }
 
