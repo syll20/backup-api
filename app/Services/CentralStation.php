@@ -48,8 +48,9 @@ class CentralStation
                 $this->template = str_replace("%".$placeholder, $this->$functionName(), $this->template);
             }
         }
-
         dd($this->template);
+
+        
     }
 
 
@@ -225,7 +226,6 @@ class CentralStation
         var_dump("Dans function homeTeamGoalaverage<br>");
         $games = $this->standings($where, $where);
 
-        var_dump(($games->goals->for - $games->goals->against));
         return  sprintf("%+d", $games->goals->for - $games->goals->against);
     }
 
@@ -266,7 +266,7 @@ class CentralStation
 
     private function awayTeamRanking()
     {
-        return $this->awayTeamRanking('away');
+        return $this->homeTeamRanking('away');
     }
 
 
@@ -353,8 +353,6 @@ class CentralStation
             ->withHeaders($this->soccerDataApi->getAuthKeys())
             ->get($url);
     
-
-
         $data = json_decode(json_encode($data['response']), FALSE);
 
         cache($this->endpoint, $data, now()->addMinutes(10));

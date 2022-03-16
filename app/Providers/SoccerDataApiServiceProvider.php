@@ -30,6 +30,11 @@ class SoccerDataApiServiceProvider extends ServiceProvider
             var_dump('singleton');
             return new $server_config['namespace']($server_config);
         });
+/*
+        $this->app->bind(Standing::class, function ($app) {
+            var_dump('BIND STANDING CLASSES');
+            return new GeneralStanding;
+        });*/
     }
 
     

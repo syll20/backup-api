@@ -96,38 +96,7 @@ class FixtureController extends Controller
          * creer une class Rule GameDate php artisan make:rule GameDate
         */
 
-        //dd($request);
-        //$api->fixtures();
 
-
-        /*
-        $fixture['timestamp'] = 1234;
-        $fixture['venue']['name'] = 'Roazhon Park';
-        $fixture['referee'] = "Mr l'arbitre";
-
-        $f = json_decode (json_encode ($fixture), FALSE);
-       // dd($f->venue->name);
-        */
-
-        //$action->handle('fixtures');
-        //$action->handle();
-
-
-        //$home = array();
-        /*$home[91] = 41;
-        $home[94] = 54;
-        $home[92] = 42;
-        arsort($home);*/
-        
-        $home = array();
-        $home['points'][91] = 41;
-        $home['diff'][91] = 15;
-
-        $home['points'][94] = 54;
-        $home['diff'][94] = 5;
-
-        $home['points'][92] = 41;
-        $home['diff'][92] = 17;
 
         /*
         $ar = array(
@@ -213,24 +182,5 @@ if (Storage::disk('local')->exists('public/exemple.txt')) {
         $central->handle();
 
     }
-    /*
-            $json = Cache::remember('next1', 30, function () {
-                print "CLOSURE";
-                return Http::
-                    withHeaders([
-                        $this->auth['key_name'] => $this->auth['key_value']
-                    ])->get('https://v3.football.api-sports.io/fixtures?league=61&season=2021&team=94&next=5');
-
-            });
-        */
-        /*            
-            var_dump($this->auth['key_name']);
-            var_dump($this->auth['key_value']);
-            collect($json['response'])->map(function($data){
-                var_dump($data['teams']);
-            });
-            exit;
-        */
-               // print_r( Utils::jsonDecode($json->body()));
 
 }
