@@ -58,7 +58,7 @@
 
                                         <div><input type="checkbox" name="placeholders[]" value="home_team_logo" checked /> %home_team_logo</div>
                                         <div><input type="checkbox" name="placeholders[]" value="away_team_logo" checked /> %away_team_logo</div>
-                                        <div class="col-span-2"><input type="checkbox" name="placeholders[]" value="referee" checked /> %referee</div>
+                                        <div class="col-span-2"><input type="checkbox" name="placeholders[]" value="main_referee" checked /> %main_referee</div>
                                     
                                         <div><input type="checkbox" name="placeholders[]" value="home_team_injuries"  /> %home_team_injuries</div>
                                         <div class="col-span-3"><input type="checkbox" name="placeholders[]" value="away_team_injuries"  /> %away_team_injuries</div>
@@ -74,11 +74,16 @@
                                         <div><input type="checkbox" name="placeholders[]" value="home_team_wdl" checked /> %home_team_wdl</div>
                                         <div><input type="checkbox" name="placeholders[]" value="home_team_points" checked /> %home_team_points</div>
                                         <div><input type="checkbox" name="placeholders[]" value="home_team_goalaverage" checked /> %home_team_goalaverage</div>
+                                        <div><input type="checkbox" name="placeholders[]" value="home_team_ranking" checked /> %home_team_ranking</div>
+                                        <div><input type="checkbox" name="placeholders[]" value="home_team_last_5" checked /> %home_team_last_5</div>
+                                        
                                         <div><input type="checkbox" name="placeholders[]" value="away_team_wdl" checked /> %away_team_wdl</div>
-                                        
                                         <div><input type="checkbox" name="placeholders[]" value="away_team_points" checked /> %away_team_points</div>
-                                        <div class="col-span-3"><input type="checkbox" name="placeholders[]" value="away_team_goalaverage" checked /> %away_team_goalaverage</div>
-                                        
+                                        <div><input type="checkbox" name="placeholders[]" value="away_team_goalaverage" checked /> %away_team_goalaverage</div>
+                                        <div><input type="checkbox" name="placeholders[]" value="away_team_ranking" checked /> %away_team_ranking</div>
+                                        <div><input type="checkbox" name="placeholders[]" value="away_team_last_5" checked /> %away_team_last_5</div>
+
+                                        <div><input type="checkbox" name="placeholders[]" value="best_scorers" checked />%best_scorers</div>
                                 </div>
                                 <br><input type="submit" value="{{ __('Submit') }}" />
                             </form>

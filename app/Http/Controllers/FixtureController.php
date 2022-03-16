@@ -177,7 +177,7 @@ if (Storage::disk('local')->exists('public/exemple.txt')) {
 
 
 
-        dd('stop');
+        //dd('stop');
 
         $central->handle();
 
