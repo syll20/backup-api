@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6a0cbcea61da26ccdb97e45cad1220cd",
+    "content-hash": "39fd5fd95a54810e1dfdb0172b061755",
     "packages": [
         {
             "name": "brick/math",
@@ -5441,6 +5441,79 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.10.0"
             },
             "time": "2021-03-09T10:59:23+00:00"
+        },
+        {
+            "name": "weidner/goutte",
+            "version": "dev-l9-compatibility",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-shift/laravel-goutte.git",
+                "reference": "9333631c6f7a5a30a1d670ed08ddc5ea948294b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-shift/laravel-goutte/zipball/9333631c6f7a5a30a1d670ed08ddc5ea948294b8",
+                "reference": "9333631c6f7a5a30a1d670ed08ddc5ea948294b8",
+                "shasum": ""
+            },
+            "require": {
+                "fabpot/goutte": "^4.0",
+                "illuminate/support": "^9.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Weidner\\Goutte\\GoutteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Goutte": "Weidner\\Goutte\\GoutteFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Weidner\\Goutte\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Weidner\\Goutte\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "phpunit"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Weidner",
+                    "email": "hallo@danielweidner.de",
+                    "homepage": "https://danielweidner.de"
+                }
+            ],
+            "description": "Laravel Facade for Goutte, a simple PHP Web Scraper",
+            "homepage": "https://github.com/dweidner/laravel-goutte",
+            "keywords": [
+                "goutte",
+                "laravel",
+                "weidner"
+            ],
+            "support": {
+                "source": "https://github.com/laravel-shift/laravel-goutte/tree/l9-compatibility"
+            },
+            "time": "2022-02-11T23:20:47+00:00"
         }
     ],
     "packages-dev": [
@@ -8012,16 +8085,16 @@
         },
         {
             "name": "spatie/laravel-ignition",
-            "version": "1.0.9",
+            "version": "1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-ignition.git",
-                "reference": "d7b223300d511145eea87fdabae1663c7c0088aa"
+                "reference": "71df77cad94aae4db904aaef1cc2f06950daed76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-ignition/zipball/d7b223300d511145eea87fdabae1663c7c0088aa",
-                "reference": "d7b223300d511145eea87fdabae1663c7c0088aa",
+                "url": "https://api.github.com/repos/spatie/laravel-ignition/zipball/71df77cad94aae4db904aaef1cc2f06950daed76",
+                "reference": "71df77cad94aae4db904aaef1cc2f06950daed76",
                 "shasum": ""
             },
             "require": {
@@ -8095,7 +8168,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-11T14:19:27+00:00"
+            "time": "2022-03-17T11:01:36+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -8150,7 +8223,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "weidner/goutte": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

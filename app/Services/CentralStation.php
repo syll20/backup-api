@@ -273,8 +273,7 @@ class CentralStation
     protected function bestScorers()
     {
         /**
-         * 1. select max
-         * 2. select where home = max
+         * 1. select where home = (select max(home from scorers))
          */
 
         $this->loadFixtures();
