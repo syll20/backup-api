@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-
+use App\Actions\Injuries;
 use App\Contracts\SoccerDataApiInterface;
 use App\Http\Requests\StoreFixtureRequest;
-use App\Models\Standing;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use IntlDateFormatter;
+use App\Models\Scorer;
 
 class CentralStation
 {
@@ -25,8 +25,10 @@ class CentralStation
     protected $fixtures = null;
     protected $standings = null;
     protected $injuries = null;
+    protected $template = null;
+    protected $templateScorer = null;
 
-    public function __construct(StoreFixtureRequest $request, SoccerDataApiInterface $soccerDataApi)
+    public function __construct(StoreFixtureRequest $request, SoccerDataApiInterface $soccerDataApi, Injuries $injuries)
     {
         $this->request = $request;
         $this->request['season'] = '2021';
@@ -35,6 +37,7 @@ class CentralStation
         $this->placeholders = $request['placeholders'];
         $this->presentation = $request['presentation'];
         $this->soccerDataApi = $soccerDataApi;
+        $this->injuries = $injuries;
     }
 
     public function handle()
@@ -46,13 +49,10 @@ class CentralStation
             $functionName = Str::camel($placeholder);
 
             if (method_exists($this, $functionName)) {
-                var_dump($placeholder . ": ". $functionName ."<br>");
                 $this->template = str_replace("%".$placeholder, $this->$functionName(), $this->template);
             }
         }
-        dd($this->template);
-
-        
+        return $this->template;
     }
 
 
@@ -61,7 +61,6 @@ class CentralStation
      */
     protected function competition()
     {
-        var_dump("Dans function competition<br>");
         $this->loadFixtures();
 
         return $this->fixtures->league->name;
@@ -69,7 +68,6 @@ class CentralStation
 
     protected function round()
     {
-        var_dump("Dans function round<br>");
         $this->loadFixtures();
 
         $tmp = explode('-', $this->fixtures->league->round);
@@ -81,12 +79,11 @@ class CentralStation
      */
     protected function dateTime()
     {
-        var_dump("Dans function dateTime<br>");
         $this->loadFixtures();
 
         return (new IntlDateFormatter(
             "fr_FR" ,
-            IntlDateFormatter::LONG, 
+            IntlDateFormatter::FULL, 
             IntlDateFormatter::SHORT, 
             'Europe/Paris',
             IntlDateFormatter::GREGORIAN
@@ -98,7 +95,6 @@ class CentralStation
      */
     protected function venue()
     {
-        var_dump("Dans function venue<br>");
         $this->loadFixtures();
         return $this->fixtures->fixture->venue->name;
     }
@@ -122,7 +118,6 @@ class CentralStation
      */
     protected function mainReferee()
     {
-        var_dump("Dans function referee<br>");
         $this->loadFixtures();
         return $this->fixtures->fixture->referee;
     }
@@ -132,15 +127,13 @@ class CentralStation
      */
     protected function homeTeamInjuries($where = 'home')
     {
-        var_dump("Dans function homeTeamInjuries<br>");
-
-        $this->loadInjuries();
+        /*$this->loadInjuries();
         $this->loadFixtures();
 
         $list = [];
 
         if(!isset($this->injuries)){
-            return "";
+            return "yo";
         }
 
         foreach($this->injuries as $injurie)
@@ -150,12 +143,15 @@ class CentralStation
                 $list[] = $injurie->player->name;
             }
          }
-        return implode(", ", $list); 
+        return implode(", ", $list); */
+        return $this->injuries->teamInjuries('home');
     }
 
     protected function awayTeamInjuries()
     {
-        return $this->homeTeamInjuries('away');
+        //return $this->homeTeamInjuries('away');
+
+        return $this->injuries->teamInjuries('away');
     }
 
     /**
@@ -163,7 +159,6 @@ class CentralStation
      */
     protected function generalHomeRanking($where = 'home')
     {
-        var_dump("Dans function generalHomeRanking<br>");
         return $this->standings($where, 'rank'); 
     }
 
@@ -174,7 +169,6 @@ class CentralStation
 
     protected function generalHomePoints($where = 'home')
     {
-        var_dump("Dans function generalHomePoints<br>");
         return $this->standings($where, 'points'); 
     }
 
@@ -185,7 +179,6 @@ class CentralStation
 
     protected function generalHomeGoalaverage($where = 'home')
     {
-        var_dump("Dans function generalHomeGoalaverage<br>");
         return sprintf("%+d", $this->standings($where, 'goalsDiff'));
     }
 
@@ -194,42 +187,33 @@ class CentralStation
         return $this->generalHomeGoalaverage('away');
     }
 
-
     protected function homeTeamWdl($where = 'home')
     {
-        var_dump("Dans function homeTeamWdl<br>");
         $games = $this->standings($where, $where);
-        //dd(sprintf("%dV- %dN - %dD", $games->win, $games->draw, $games->lose));
+
         return sprintf("%dV- %dN - %dD", $games->win, $games->draw, $games->lose);
     }
     
     protected function awayTeamWdl($where = 'away')
     {
-        var_dump("Dans function awayTeamWdl<br>");
         return $this->homeTeamWDL('away');
-
-        //dd($tmp);
     }
 
     protected function homeTeamPoints($where = 'home')
     {
-        var_dump("Dans function homeTeamPoints<br>");
         $games = $this->standings($where, $where);
 
-        var_dump(($games->win *3 + $games->draw));
         return  ($games->win *3 + $games->draw);
     }
 
     protected function awayTeamPoints()
     {
-        var_dump("Dans function awayTeamPoints<br>");
         return $this->homeTeamPoints('away');
     }
     
 
     protected function homeTeamGoalaverage($where = 'home')
     {
-        var_dump("Dans function homeTeamGoalaverage<br>");
         $games = $this->standings($where, $where);
 
         return  sprintf("%+d", $games->goals->for - $games->goals->against);
@@ -237,13 +221,11 @@ class CentralStation
 
     protected function awayTeamGoalaverage()
     {
-        var_dump("Dans function awayTeamGoalaverage<br>");
         return $this->homeTeamGoalaverage('away');
     }
 
     protected function homeTeamRanking($where = 'home')
     {
-        var_dump("POSITION DU CLUB:");  
         return $this->standingsDB($where, 'rank');
     }
 
@@ -254,66 +236,55 @@ class CentralStation
 
     protected function homeTeamLast5($where = 'home')
     {
-        var_dump("Last 5 home");
         return $this->standingsDB($where, 'last5');
     }
 
     protected function awayTeamLast5()
     {
-        var_dump("last 5 away");
         return $this->homeTeamLast5('away');
     }
 
 
     /**
-     * [center][b]Meilleurs buteurs (Dom | Ext)[/b][/center] 
-     * [center][img](lien de la photo du buteur)[/img] | [img](lien de la photo du buteur)[/img][/center]
-     * [center]Prénom NOM (nbre de but) | Prénom NOM (nbre de but)[/center]
+     * 
+     * %home_photo_scorer | %away_photo_scorer
+     * %home_name_scorer (%home_goal_scorer) | %away_name_scorer (%away_goal_scorer)
      */
     protected function bestScorers()
     {
-        /**
-         * 1. select where home = (select max(home from scorers))
-         */
-
         $this->loadFixtures();
-       
-        $homeScorers = DB::table('scorers')
-            ->select('max(home)', 'first_name', 'last_name', 'photo')
-            ->where('club_id', '=', $this->fixtures->teams->home->id)
-            ->orderBy('home', 'DESC')
-            ->get('home');
+        $this->getTemplateScorer();
 
-        $awayScorers = DB::table('scorers')
-            ->where('club_id', '=', $this->fixtures->teams->away->id)
-            ->orderBy('away', 'DESC')
-            ->max('away');
+        $this->setTemplateScorer(Scorer::best('home', $this->fixtures), 'home');
+        $this->setTemplateScorer(Scorer::best('away', $this->fixtures), 'away');
 
-        var_dump($awayScorers);
-        //var_dump($awayScorers);
-        // home
-        $data = array();
-        dd($homeScorers);
-
-        foreach($homeScorers as $scorer)
-        {
-            $data[$scorer->player_id] = ['goals' => $scorer->home, 'photo' => $scorer->photo];
-            dd($data);
-        }
-
-
-
-
-
+        return $this->templateScorer;
     }
 
+    protected function setTemplateScorer($scorers, $location)
+    {
+        $photos = [];
+        $names = [];
+        $goals = "";
+
+        foreach($scorers as $scorer)
+        {
+            $photos[] = "[img]".$scorer->photo."[/img]";
+            $names[] =  $scorer->first_name . " " . strtoupper($scorer->last_name);
+            $goals = $scorer->$location;
+        }
+
+        $this->templateScorer = str_replace("%{$location}_photo_scorer", implode(' ', $photos), $this->templateScorer);
+        $this->templateScorer = str_replace("%{$location}_name_scorer", implode(', ', $names), $this->templateScorer);
+        $this->templateScorer = str_replace("%{$location}_goal_scorer", $goals, $this->templateScorer);
+    }
     
 
     protected function standingsDB($where, $field)
     {
         $this->loadFixtures();
        
-        $data = DB::table('standings')->where([
+        return $data = DB::table('standings')->where([
             ['club_id', '=', $this->fixtures->teams->$where->id],
             ['location', '=', $where]
         ])->value($field);
@@ -337,7 +308,7 @@ class CentralStation
 
 
 
-
+    /*
     private function loadInjuries()
     {
         if(isset($this->injuries)){
@@ -346,15 +317,14 @@ class CentralStation
 
         $this->endpoint = $this->soccerDataApi->getInjuriesByFixture($this->fixtures->fixture->id);
 
-        return $this->callServer();
-    }
+        $this->injuries = $this->callServer();
+    }*/
 
     private function loadStandings()
     {
         if(isset($this->standings)){
             return;
         }
-        var_dump("IL N'Y A PAS DE STANDINGS");
 
         $this->endpoint = $this->soccerDataApi->getStandingsByLeagueAndSeason(
             $this->fixtures->league->id, 
@@ -362,19 +332,18 @@ class CentralStation
         );
 
         $tmp = $this->callServer();
-        //dd($tmp[0]->league->standings);
+
         $this->standings = $tmp[0]->league->standings[0];
     }
 
 
-
+    
     private function loadFixtures()
     {        
         if(isset($this->fixtures)){
             return;
         }
 
-        var_dump("DANS LOAD FIXTURES");
         foreach($this->soccerDataApi->fixtures_mixed_filters as $field => $null)
         {
             if(isset($this->request->$field))
@@ -398,7 +367,7 @@ class CentralStation
         }
 
         $url = filter_var($this->soccerDataApi->baseUrl . $this->endpoint, FILTER_SANITIZE_URL);
-        print "URL OK on appel l'api avec " . $url;
+
         $data = Http::acceptJson()
             ->withHeaders($this->soccerDataApi->getAuthKeys())
             ->get($url);
@@ -413,6 +382,13 @@ class CentralStation
     private function getTemplate()
     {
         return Storage::get('public/template.bb');
+    }
+
+    private function getTemplateScorer()
+    {
+        $this->templateScorer = " 
+            %home_photo_scorer | %away_photo_scorer
+            %home_name_scorer (%home_goal_scorer) | %away_name_scorer (%away_goal_scorer)";
     }
 
 }

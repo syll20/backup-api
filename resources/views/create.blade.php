@@ -28,22 +28,23 @@
                         @endif
                         </div>
                         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-green-500">
+                            @if(isset($template))
+                            <textarea class="w-full" rows=80 id="label">
+                                {{ $template }}
+                            </textarea>
+                            @endif
                             <form method="POST" action="/generate">
                                 @csrf
                                 <input type=hidden name="team" value="94" />
                                 <select name="date" id="game_date" required>
-                                    <option value="2022-03-20">Rennes-Metz (20 mars 2022)</option>
-                                    @if(isset($next_games['response']))
-                                        @foreach($next_games['response'] as $next_game)
-                                            <option value="{{ date('Y-m-d', $next_game['fixture']['timestamp']) }}">
-                                                [{{ $next_game['league']['name'] }}
+                                    @if(isset($next_games))
+                                        @foreach($next_games as $next_game)
+                                            <option value="{{ Str::subStr($next_game->kickoff, 0, 10) }}">
+                                                [{{ $next_game->label }}
                                                 -
-                                                {{ $next_game['league']['round'] }}]
+                                                ({{ $next_game->id}})]
 
-                                                {{ $next_game['teams']['home']['name'] }}
-                                                -
-                                                {{ $next_game['teams']['away']['name'] }}
-                                                ({{ date("d M Y H:i", $next_game['fixture']['timestamp']) }})
+                                                {{ $next_game->kickoff }}
                                             </option>
                                         @endforeach
                                     @endif
@@ -51,7 +52,7 @@
 
                                 <div class="relative grid grid-cols-4 bg-red-500 gap-6">
                                     
-                                        <div class="bg-blue-600"><input type="checkbox" name="placeholders[]" value="competition" checked /> %competition</div>
+                                        <div><input type="checkbox" name="placeholders[]" value="competition" checked /> %competition</div>
                                         <div><input type="checkbox" name="placeholders[]" value="round" checked /> %round</div>
                                         <div><input type="checkbox" name="placeholders[]" value="date_time" checked /> %date_time</div>
                                         <div><input type="checkbox" name="placeholders[]" value="venue" checked /> %venue</div>

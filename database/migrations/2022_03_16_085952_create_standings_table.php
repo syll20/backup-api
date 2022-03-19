@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('season');
             $table->integer('club_id');
             $table->string('name');
-            $table->string('where');
+            $table->string('location');
             $table->tinyInteger('rank');
             $table->smallInteger('points');
             $table->tinyInteger('played');
