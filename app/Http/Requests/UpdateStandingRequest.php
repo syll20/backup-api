@@ -30,21 +30,21 @@ class UpdateStandingRequest extends FormRequest
             "ranking"    => [
                 'required',
                 'array', // input must be an array
-                'min:14'  // there must be n members in the array
+                'min:12'  // there must be n members in the array
             ],
             "ranking.*.id"  => [
                 'required',
                 'integer',
                 Rule::exists('standings', 'id')
             ],
-            "ranking.*.league"  => [
+            /*"ranking.*.league"  => [
                 'required',
                 'integer',
             ],
             "ranking.*.season"  => [
                 'required',
                 'integer',
-            ],
+            ],*/
             "ranking.*.club_id"  => [
                 'required',
                 'integer',
@@ -118,5 +118,5 @@ class UpdateStandingRequest extends FormRequest
         ];
     }
 
-    
+
 }

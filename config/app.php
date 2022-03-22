@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\SoccerDataApiServiceProvider::class,
+        App\Providers\ViewServiceProvider::class,
         Weidner\Goutte\GoutteServiceProvider::class,
 
     ],

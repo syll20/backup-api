@@ -7,4 +7,3 @@
 
         {{ $attributes(['value' => old($id, $value)]) }}
 />
-<x-form.error id="{{$id}}" />

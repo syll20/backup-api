@@ -1,8 +1,11 @@
 <?php
 
 use App\Enums\Location;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\FixtureController;
+use App\Http\Controllers\ScorerController;
 use App\Http\Controllers\StandingController;
+use App\Models\Calendar;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,16 +29,13 @@ Route::post('/generate',  [FixtureController::class, 'store'])->name('generate')
  */
 
 Route::get('/admin/standings', [StandingController::class, 'index'])->name('standings');
-
-
-/**
- * TODO :: 
- * 
- *      - Voir le classement d'une equipe (home ou away)
- *      - Update les infos d'une equipe, (home ou away)
- */
 Route::get('/admin/standings/{location}', [StandingController::class, 'show'])->name('show_standing');
 Route::patch('/admin/standings', [StandingController::class, 'update'])->name('update_standing');  
+
+Route::patch('/admin/scorer', [ScorerController::class, 'update'])->name('admin_update_scorers');
+
+Route::get('/admin/calendars', [CalendarController::class, 'index'])->name('admin_calendars');
+Route::patch('/admin/calendars', [CalendarController::class, 'update'])->name('admin_update_calendars');
 
 
 Route::get('/', function () {

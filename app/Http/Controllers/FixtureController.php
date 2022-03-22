@@ -28,7 +28,7 @@ class FixtureController extends Controller
 
     public function index()
     {
-        return view('list', [
+        return view('admin.fixture-list', [
             'fixtures' => Fixture::with('user', 'calendar')->latest()->paginate(5)
         ]);
     }
@@ -72,7 +72,8 @@ class FixtureController extends Controller
             $fixture->save();
 
         }
-        $games = Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->get();;
+        $games = Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->get();
+
         return view('create', [
             'next_games' => $games,
             'template' => $central->handle()

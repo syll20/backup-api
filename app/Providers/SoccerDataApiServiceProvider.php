@@ -26,8 +26,9 @@ class SoccerDataApiServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->singleton(SoccerDataApiInterface::class, function ($app) {
+            
             $server_config = $this->setup();
-            var_dump('singleton');
+
             return new $server_config['namespace']($server_config);
         });
 /*

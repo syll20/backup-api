@@ -9,17 +9,26 @@ class Scorer extends Model
 {
     use HasFactory;
 
-
+    protected $fillable = ['total', 'home', 'away'];
+    /**
+     * Specific for one team 
+     */
     public function scopeBest($query, string $location, $fixtures)
     {
         return $this
             ->where([
-            ['club_id', '=', $fixtures->teams->$location->id],
-            [$location, '=', function($query) use ($location, $fixtures){
-                $query->selectRaw("max($location)")->where('club_id', '=', $fixtures->teams->$location->id)->from('scorers');
-            }]
+                ['club_id', '=', $fixtures->teams->$location->id],
+                [$location, '=', function($query) use ($location, $fixtures){
+                    $query->selectRaw("max($location)")->where('club_id', '=', $fixtures->teams->$location->id)->from('scorers');
+                }]
             ])->get();
     }
 
+    public function getAllOrderBy($column, $direction)
+    {
+        return $this
+            ->orderBy($column, $direction)
+            ->get();
+    }
 
 }

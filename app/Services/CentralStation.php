@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Actions\Injuries;
 use App\Contracts\SoccerDataApiInterface;
 use App\Http\Requests\StoreFixtureRequest;
 use Illuminate\Support\Facades\Cache;
@@ -28,7 +27,7 @@ class CentralStation
     protected $template = null;
     protected $templateScorer = null;
 
-    public function __construct(StoreFixtureRequest $request, SoccerDataApiInterface $soccerDataApi, Injuries $injuries)
+    public function __construct(StoreFixtureRequest $request, SoccerDataApiInterface $soccerDataApi)
     {
         $this->request = $request;
         $this->request['season'] = '2021';
@@ -37,7 +36,6 @@ class CentralStation
         $this->placeholders = $request['placeholders'];
         $this->presentation = $request['presentation'];
         $this->soccerDataApi = $soccerDataApi;
-        $this->injuries = $injuries;
     }
 
     public function handle()
@@ -127,7 +125,7 @@ class CentralStation
      */
     protected function homeTeamInjuries($where = 'home')
     {
-        /*$this->loadInjuries();
+        $this->loadInjuries();
         $this->loadFixtures();
 
         $list = [];
@@ -143,15 +141,15 @@ class CentralStation
                 $list[] = $injurie->player->name;
             }
          }
-        return implode(", ", $list); */
-        return $this->injuries->teamInjuries('home');
+        return implode(", ", $list); 
+        //return $this->injuries->teamInjuries('home');
     }
 
     protected function awayTeamInjuries()
     {
-        //return $this->homeTeamInjuries('away');
+        return $this->homeTeamInjuries('away');
 
-        return $this->injuries->teamInjuries('away');
+        //return $this->injuries->teamInjuries('away');
     }
 
     /**
@@ -308,7 +306,7 @@ class CentralStation
 
 
 
-    /*
+    
     private function loadInjuries()
     {
         if(isset($this->injuries)){
@@ -318,7 +316,7 @@ class CentralStation
         $this->endpoint = $this->soccerDataApi->getInjuriesByFixture($this->fixtures->fixture->id);
 
         $this->injuries = $this->callServer();
-    }*/
+    }
 
     private function loadStandings()
     {
@@ -371,7 +369,7 @@ class CentralStation
         $data = Http::acceptJson()
             ->withHeaders($this->soccerDataApi->getAuthKeys())
             ->get($url);
-    
+   
         $data = json_decode(json_encode($data['response']), FALSE);
 
         cache($this->endpoint, $data, now()->addMinutes(10));
