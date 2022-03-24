@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Contracts\SoccerDataApiInterface;
+use App\Exceptions\GameDateException;
+use App\Http\Controllers\FixtureController;
 use App\Http\Requests\StoreFixtureRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +13,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use IntlDateFormatter;
 use App\Models\Scorer;
+use ErrorException;
+use Exception;
+use Illuminate\Support\Facades\Redirect;
 
 class CentralStation
 {
@@ -40,6 +45,11 @@ class CentralStation
 
     public function handle()
     {
+        if($this->loadFixtures() === null)
+        {
+            return null;
+        }
+
         $this->template = $this->getTemplate();
 
         foreach($this->placeholders as $placeholder)
@@ -59,7 +69,7 @@ class CentralStation
      */
     protected function competition()
     {
-        $this->loadFixtures();
+        //$this->loadFixtures();
 
         return $this->fixtures->league->name;
     }
@@ -77,7 +87,7 @@ class CentralStation
      */
     protected function dateTime()
     {
-        $this->loadFixtures();
+        //$this->loadFixtures();
 
         return (new IntlDateFormatter(
             "fr_FR" ,
@@ -93,7 +103,7 @@ class CentralStation
      */
     protected function venue()
     {
-        $this->loadFixtures();
+        //$this->loadFixtures();
         return $this->fixtures->fixture->venue->name;
     }
 
@@ -102,7 +112,7 @@ class CentralStation
      */
     protected function homeTeamLogo($where = 'home')
     {
-        $this->loadFixtures();
+        //$this->loadFixtures();
         return $this->fixtures->teams->$where->logo;
     }
 
@@ -116,7 +126,7 @@ class CentralStation
      */
     protected function mainReferee()
     {
-        $this->loadFixtures();
+        //$this->loadFixtures();
         return $this->fixtures->fixture->referee;
     }
 
@@ -126,12 +136,12 @@ class CentralStation
     protected function homeTeamInjuries($where = 'home')
     {
         $this->loadInjuries();
-        $this->loadFixtures();
+        //$this->loadFixtures();
 
         $list = [];
 
         if(!isset($this->injuries)){
-            return "yo";
+            return "";
         }
 
         foreach($this->injuries as $injurie)
@@ -148,8 +158,6 @@ class CentralStation
     protected function awayTeamInjuries()
     {
         return $this->homeTeamInjuries('away');
-
-        //return $this->injuries->teamInjuries('away');
     }
 
     /**
@@ -250,7 +258,7 @@ class CentralStation
      */
     protected function bestScorers()
     {
-        $this->loadFixtures();
+        //$this->loadFixtures();
         $this->getTemplateScorer();
 
         $this->setTemplateScorer(Scorer::best('home', $this->fixtures), 'home');
@@ -280,7 +288,7 @@ class CentralStation
 
     protected function standingsDB($where, $field)
     {
-        $this->loadFixtures();
+        //$this->loadFixtures();
        
         return $data = DB::table('standings')->where([
             ['club_id', '=', $this->fixtures->teams->$where->id],
@@ -292,7 +300,7 @@ class CentralStation
     protected function standings($where, $field)
     {
         $this->loadStandings();
-        $this->loadFixtures();
+        //$this->loadFixtures();
 
         foreach($this->standings as $standing)
         {
@@ -353,7 +361,14 @@ class CentralStation
         $this->endpoint = $this->soccerDataApi->getFixturesByMixedFilters($filters);
         
         $tmp = $this->callServer();
-        $this->fixtures = $tmp[0];
+
+        try{
+            $this->fixtures = $tmp[0];
+        }catch(ErrorException $e){
+            return null;
+        }
+
+        return true;
     }
 
 

@@ -43,40 +43,34 @@ class FixtureController extends Controller
 
     public function create()
     {     
-        $games = Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->get();
         return view('create', [
-            'next_games' => $games
+            'next_games' => Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->get()
         ]);
     }
 
 
-    //public function store(StoreFixtureRequest $request, MainAction $action)
     public function store(StoreFixtureRequest $request, CentralStation $central)
     {
-        /*
-         * TODO: Custom Rule: 
-         *
-         *  Verifier la date correspond a un match de l'equipe
-         * getFixturesByDate()
-         * creer une class Rule GameDate php artisan make:rule GameDate
-        */
-
+        
         $template = $central->handle();
 
-        if($template)
+        if(! isset($template))
         {
-            $fixture = new Fixture();
-            $fixture->user_id = auth()->id();
-            $fixture->template = $template;
-            $fixture->calendar_id = Calendar::where('kickoff', 'like', $request->date.'%')->value('id');
-            $fixture->save();
-
+            return redirect('/create')
+                ->withErrors("There is no fixture that day ($request->date)");
         }
+
+        $fixture = new Fixture();
+        $fixture->user_id = auth()->id();
+        $fixture->template = $template;
+        $fixture->calendar_id = Calendar::where('kickoff', 'like', $request->date.'%')->value('id');
+        $fixture->save();
+    
         $games = Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->get();
 
         return view('create', [
             'next_games' => $games,
-            'template' => $central->handle()
+            'template' => $template
         ]);
 
         

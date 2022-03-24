@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('admin_calendars')" :active="request()->routeIs('admin_calendars')">
                         {{ __('Calendar') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin_h2h')" :active="request()->routeIs('admin_h2h')">
+                        {{ __('Head 2 head') }}
+                    </x-nav-link>
                 </div>
             </div>
 

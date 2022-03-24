@@ -3,6 +3,7 @@
 use App\Enums\Location;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\FixtureController;
+use App\Http\Controllers\Head2headController;
 use App\Http\Controllers\ScorerController;
 use App\Http\Controllers\StandingController;
 use App\Models\Calendar;
@@ -36,6 +37,9 @@ Route::patch('/admin/scorer', [ScorerController::class, 'update'])->name('admin_
 
 Route::get('/admin/calendars', [CalendarController::class, 'index'])->name('admin_calendars');
 Route::patch('/admin/calendars', [CalendarController::class, 'update'])->name('admin_update_calendars');
+
+Route::get('/admin/h2h', [Head2headController::class, 'index'])->name('admin_h2h');
+Route::post('/admin/h2h/import', [Head2headController::class, 'store'])->name('admin_h2h_import');
 
 
 Route::get('/', function () {
