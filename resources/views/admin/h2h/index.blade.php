@@ -1,16 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Head to head') }}
-        </h2>
+        <x-layout.sub-navigation.title title="Head to head : ">
+        </x-layout-subnavigation.title>
     </x-slot>
-
+ 
     <x-layout.main>
         <div class="col-span-2">
-            <select>
-                <option>Nice</option>
-                <option>Marseille</option>
-                <option>Monaco</option>
+            <select name="club">
+                @foreach($clubs as $club)
+                    <option value="@if($club->name2){{$club->name2}}@else{{$club->name}}@endif">{{$club->name}}</option>
+                @endforeach
             </select>
             <input type="radio"> Home - 
             <input type="radio"> Away -
@@ -22,13 +21,12 @@
         <div class="bg-red-500 ">
             <form method="post" action="/admin/h2h/import">
                 @csrf
-                Mass Import here
+                Import here
                 <input type="text" size="50" name="target" value="{{ old('target', 'test') }}" />
-                Vs  <select name="club">
-                    <option value="Metz">Metz</option>
-                    <option value="Nice">Nice</option>
-                    <option value="Marseille">Marseille</option>
-                    <option value="Monaco">Monaco</option>
+                Vs <select name="club">
+                    @foreach($clubs as $club)
+                        <option value="@if($club->name2){{$club->name2}}@else{{$club->name}}@endif">{{$club->name}}</option>
+                    @endforeach
                 </select>
                 <input type="radio" name="location" value="home"> Home - <input type="radio" name="location" value="away"> Away<br>
                 <input type="submit" value="Import" />

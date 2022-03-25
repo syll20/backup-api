@@ -9,10 +9,12 @@ use App\Contracts\SoccerDataApiInterface;
  */
 class ApiFootballComV3 implements SoccerDataApiInterface
 {
- 
-    private $auth_key_name = null;
-    private $auth_key_value = null;
+    private $authKeyName = null;
+    private $authKeyValue = null;
     public $base_url = null;
+    public $league = null;
+    public $season = null;
+    public $club = null;
 
     public $fixtures_mixed_filters = 
         [
@@ -30,18 +32,14 @@ class ApiFootballComV3 implements SoccerDataApiInterface
         ]
     ;
 
-/*
-    function __construct(App $app)
+    public function __construct(array $server)
     {
-        $this->app = $app;
-    }
-*/
-    function __construct(array $server)
-    {
-        //dd($provider);
         $this->authKeyName = $server['auth_key_name'];
         $this->authKeyValue = $server['auth_key_value'];
         $this->baseUrl = $server['base_url'];
+        $this->league = $server['league_id'];
+        $this->club = $server['club_id'];
+        $this->season = $server['current_season'];
     }
 
     public function getAuthKeys(): array

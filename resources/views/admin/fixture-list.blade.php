@@ -1,8 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl  leading-tight">
-            {{ __('Templates') }}
-        </h2>
+        <x-layout.sub-navigation.title title="Templates : ">
+            <x-layout.sub-navigation.link href="/lists" name="All" />
+            <x-layout.sub-navigation.link href="/create" name="Create a template" />
+        </x-layout-subnavigation.title>
     </x-slot> 
 
     <x-layout.main>

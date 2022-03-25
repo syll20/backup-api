@@ -1,8 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl leading-tight">
-            {{ __('Standings') }} : {{ __($location) }}
-        </h2>
+        <x-layout.sub-navigation.title title="Standings {{$location}} : ">
+        </x-layout-subnavigation.title>
     </x-slot>
 
     <x-layout.main>

@@ -2,6 +2,7 @@
 
 use App\Enums\Location;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\clubController;
 use App\Http\Controllers\FixtureController;
 use App\Http\Controllers\Head2headController;
 use App\Http\Controllers\ScorerController;
@@ -41,6 +42,8 @@ Route::patch('/admin/calendars', [CalendarController::class, 'update'])->name('a
 Route::get('/admin/h2h', [Head2headController::class, 'index'])->name('admin_h2h');
 Route::post('/admin/h2h/import', [Head2headController::class, 'store'])->name('admin_h2h_import');
 
+Route::get('/admin/clubs', [clubController::class, 'index'])->name('admin_clubs');
+Route::get('/admin/clubs/import', [clubController::class, 'import'])->name('admin_clubs_import');
 
 Route::get('/', function () {
     return view('welcome');

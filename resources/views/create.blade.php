@@ -1,8 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Generate game template') }}
-        </h2>
+        <x-layout.sub-navigation.title title="Create a template : ">
+        </x-layout-subnavigation.title>
     </x-slot>
         <x-layout.main>
             <!-- This example requires Tailwind CSS v2.0+ -->

@@ -34,6 +34,9 @@ return [
     'servers' => [
 
         'api-football' => [
+            'current_season' => env('API_FOOTBALL_CURRENT_SEASON', 2021),
+            'league_id' => env('API_FOOTBALL_LEAGUE', 61),
+            'club_id' => env('API_FOOTBALL_CLUB', 94), 
             'namespace' => 'App\Servers\ApiFootballComV3',
             'base_url' => 'https://v3.football.api-sports.io',
             'auth_key_name' => env('API_FOOTBALL_KEY_NAME', 'x-apisports-key'),
