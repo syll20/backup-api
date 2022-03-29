@@ -54,8 +54,8 @@
                                 <div><input type="checkbox" name="placeholders[]" value="away_team_logo" checked /> %away_team_logo</div>
                                 <div class="col-span-2"><input type="checkbox" name="placeholders[]" value="main_referee" checked /> %main_referee</div>
                             
-                                <div><input type="checkbox" name="placeholders[]" value="home_team_injuries"  /> %home_team_injuries</div>
-                                <div class="col-span-3"><input type="checkbox" name="placeholders[]" value="away_team_injuries"  /> %away_team_injuries</div>
+                                <div><input type="checkbox" name="placeholders[]" value="home_team_injuries" checked /> %home_team_injuries</div>
+                                <div class="col-span-3"><input type="checkbox" name="placeholders[]" value="away_team_injuries" checked /> %away_team_injuries</div>
                                 
                                 <div><input type="checkbox" name="placeholders[]" value="general_home_ranking" checked /> %general_home_ranking</div>
                                 <div><input type="checkbox" name="placeholders[]" value="general_away_ranking" checked /> %general_away_ranking</div>
@@ -78,6 +78,9 @@
                                 <div><input type="checkbox" name="placeholders[]" value="away_team_last_5" checked /> %away_team_last_5</div>
 
                                 <div><input type="checkbox" name="placeholders[]" value="best_scorers" checked />%best_scorers</div>
+                                <div><input type="checkbox" name="placeholders[]" value="last_5_games" checked />%last_5_games</div>
+                                <div><input type="checkbox" name="placeholders[]" value="stats_h2h" checked />%stats_h2h</div>
+                                <div><input type="checkbox" name="placeholders[]" value="tv" checked />%tv</div>
                             </div>
                         </form>
                         </div>

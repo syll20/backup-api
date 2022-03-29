@@ -3,9 +3,8 @@
 namespace App\Services;
 
 use App\Contracts\SoccerDataApiInterface;
-use App\Exceptions\GameDateException;
-use App\Http\Controllers\FixtureController;
 use App\Http\Requests\StoreFixtureRequest;
+use App\Models\Head2head;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -14,7 +13,6 @@ use Illuminate\Support\Str;
 use IntlDateFormatter;
 use App\Models\Scorer;
 use ErrorException;
-use Exception;
 use Illuminate\Support\Facades\Redirect;
 
 class CentralStation
@@ -25,7 +23,6 @@ class CentralStation
     protected $placeholders = null;
     protected $presentation = null;
     protected $endpoint = null;
-
     protected $fixtures = null;
     protected $standings = null;
     protected $injuries = null;
@@ -69,8 +66,6 @@ class CentralStation
      */
     protected function competition()
     {
-        //$this->loadFixtures();
-
         return $this->fixtures->league->name;
     }
 
@@ -87,8 +82,6 @@ class CentralStation
      */
     protected function dateTime()
     {
-        //$this->loadFixtures();
-
         return (new IntlDateFormatter(
             "fr_FR" ,
             IntlDateFormatter::FULL, 
@@ -103,7 +96,6 @@ class CentralStation
      */
     protected function venue()
     {
-        //$this->loadFixtures();
         return $this->fixtures->fixture->venue->name;
     }
 
@@ -112,7 +104,6 @@ class CentralStation
      */
     protected function homeTeamLogo($where = 'home')
     {
-        //$this->loadFixtures();
         return $this->fixtures->teams->$where->logo;
     }
 
@@ -126,7 +117,6 @@ class CentralStation
      */
     protected function mainReferee()
     {
-        //$this->loadFixtures();
         return $this->fixtures->fixture->referee;
     }
 
@@ -136,7 +126,6 @@ class CentralStation
     protected function homeTeamInjuries($where = 'home')
     {
         $this->loadInjuries();
-        //$this->loadFixtures();
 
         $list = [];
 
@@ -152,7 +141,6 @@ class CentralStation
             }
          }
         return implode(", ", $list); 
-        //return $this->injuries->teamInjuries('home');
     }
 
     protected function awayTeamInjuries()
@@ -258,7 +246,6 @@ class CentralStation
      */
     protected function bestScorers()
     {
-        //$this->loadFixtures();
         $this->getTemplateScorer();
 
         $this->setTemplateScorer(Scorer::best('home', $this->fixtures), 'home');
@@ -283,6 +270,128 @@ class CentralStation
         $this->templateScorer = str_replace("%{$location}_photo_scorer", implode(' ', $photos), $this->templateScorer);
         $this->templateScorer = str_replace("%{$location}_name_scorer", implode(', ', $names), $this->templateScorer);
         $this->templateScorer = str_replace("%{$location}_goal_scorer", $goals, $this->templateScorer);
+    }
+
+    protected function statsH2h()
+    {
+        $template = "";
+        $templateStats = $this->getTemplateStatsH2h();
+        $location = $this->fixtures->teams->home->id == 94 ? 'away' : 'home';
+        
+        $games = Head2head::byLocation($this->fixtures->teams->$location->id, $location);
+
+        $home = 0;
+        $draw = 0;
+        $away = 0;
+
+        foreach($games as $game)
+        {         
+            if($game->home_goals > $game->away_goals){
+                ++$home;
+            }else if($game->home_goals < $game->away_goals){
+                ++$away;
+            }else{
+                ++$draw;
+            }
+        }
+
+        return str_replace(
+            [
+                '%stats_home_win',
+                '%stats_draw', 
+                '%stats_away_win'
+            ], 
+            [   
+                $home,
+                $draw,
+                $away
+            ], 
+            $templateStats);
+    }
+
+    protected function last5Games()
+    {
+        $template = "";
+        $last5 = $this->getTemplateLast5Games();
+        $location = $this->fixtures->teams->home->id == 94 ? 'away' : 'home';
+        
+        $games = Head2head::byLocation($this->fixtures->teams->$location->id, $location, 5);
+
+        foreach($games as $game)
+        {         
+            /**
+             * Home team vs Away team
+             */
+            if($game->location == 'home'){
+                $homeTeam = $game->name;
+                $awayTeam = 'Rennes';
+            }else{
+                $homeTeam = 'Rennes';
+                $awayTeam = $game->name;
+            }
+
+            /**
+             * Result: home goals - away goals
+             */
+            $win = null;
+
+            if($game->home_goals > $game->away_goals)
+            {
+                $win = 'home';
+            }else if($game->away_goals > $game->home_goals)
+            {
+                $win = 'away';
+            }
+
+            if(! $win)
+            {
+                $color = '807F7F';
+            }else 
+
+            if( ($homeTeam == 'Rennes' & $win == 'home') 
+                || ($awayTeam == 'Rennes' & $win == 'away') )
+            {
+                $color = '0050fe';
+            }else{
+                $color = 'FE0500';
+            }
+
+            $template .= str_replace(
+                [
+                    '%color',
+                    '%date_game', 
+                    '%home_team', 
+                    '%result', 
+                    '%away_team', 
+                    '%competition'
+                ], 
+                [   
+                    $color,
+                    date_format(date_create($game->played_at), 'd-m-Y'),
+                    $homeTeam,
+                    $game->home_goals . ' - ' . $game->away_goals,
+                    $awayTeam,
+                    $game->competition
+                ], 
+                $last5);
+        }
+
+        return $template;
+    }
+
+    protected function tv()
+    {
+        $dateTime = $this->dateTime();
+
+        if( Str::containsAll($dateTime, ['Samedi', '21'])
+            || Str::containsAll($dateTime, ['Dimanche', '17']) )
+        {
+            return 'https://www.ligue1.fr/-/media/Project/LFP/shared/Images/Broadcasters/Canal_Sport.png';
+        }
+        else
+        {
+            return 'https://www.ligue1.fr/-/media/Project/LFP/shared/Images/Broadcasters/Prime_Video.png';
+        }
     }
     
 
@@ -399,9 +508,17 @@ class CentralStation
 
     private function getTemplateScorer()
     {
-        $this->templateScorer = " 
-            %home_photo_scorer | %away_photo_scorer
-            %home_name_scorer (%home_goal_scorer) | %away_name_scorer (%away_goal_scorer)";
+        $this->templateScorer = Storage::get('public/template-scorers.bb');
+    }
+
+    private function getTemplateLast5Games()
+    {
+        return Storage::get('public/template-last-5-games.bb');
+    }
+
+    private function getTemplateStatsH2h()
+    {
+        return Storage::get('public/template-stats-h2h.bb');
     }
 
 }

@@ -42,7 +42,7 @@ class FixtureController extends Controller
     public function store(StoreFixtureRequest $request, CentralStation $central)
     {
         
-        if( $template = $central->handle() === null)
+        if( ($template = $central->handle()) === null)
         {
             return redirect('/create')
                 ->withErrors("There is no fixture that day ($request->date)");

@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('h2h', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('played_at');
+            $table->date('played_at');
             //$table->string('teams');
             $table->tinyInteger('home_goals');
             $table->tinyInteger('away_goals');
