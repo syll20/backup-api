@@ -1,4 +1,4 @@
-<tr class="odd:bg-red-500 even:bg-gray-400 divide-y divide-red-500 @if($scorer->club_id == 94) font-bold @endif">
+<tr class="odd:bg-gray-100 even:bg-gray-200 divide-y divide-red-500 @if($scorer->club_id == 94) font-bold @endif">
     <td><img src="{{ $scorer->photo }}" width="25" /></td>
     <td>{{ $scorer->first_name }} {{ $scorer->last_name }}</td>
     <td>

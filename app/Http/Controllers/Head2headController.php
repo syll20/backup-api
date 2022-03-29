@@ -33,7 +33,7 @@ class Head2headController extends Controller
             */
 
         return view('/admin/h2h/index', [
-            'games' => Head2head::byLocation($$request->club, $request->location ), 
+            'games' => Head2head::byLocation($request->club, $request->location), 
             'clubs' => Club::orderBy('name')->get(),
             'requestClub' => $request->club 
         ]);

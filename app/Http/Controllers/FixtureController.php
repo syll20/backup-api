@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 //require_once __DIR__.'/../../../vendor/autoload.php';
 
-use App\Actions\Fixtures;
-use App\Actions\MainAction;
-use App\Contracts\SoccerDataApiInterface;
 use App\Http\Requests\StoreFixtureRequest;
 use App\Models\Calendar;
 use App\Models\Fixture;
@@ -19,13 +16,13 @@ class FixtureController extends Controller
     public function index()
     {
         return view('admin.fixture-list', [
-            'fixtures' => Fixture::with('user', 'calendar')->latest()->paginate(5)
+            'fixtures' => Fixture::with('user', 'calendar')->latest()->paginate(8)
         ]);
     }
 
     public function show(Fixture $fixture)
     {
-        return view('show', [
+        return view('admin.template-show', [
             'fixture' => $fixture
         ]);
     }
@@ -33,7 +30,7 @@ class FixtureController extends Controller
 
     public function create()
     {     
-        return view('create', [
+        return view('admin.template-create', [
             'next_games' => Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->get()
         ]);
     }
@@ -48,19 +45,13 @@ class FixtureController extends Controller
                 ->withErrors("There is no fixture that day ($request->date)");
         }
 
-        /*if(! isset($template))
-        {
-            return redirect('/create')
-                ->withErrors("There is no fixture that day ($request->date)");
-        }*/
-
         $fixture = new Fixture();
         $fixture->user_id = auth()->id();
         $fixture->template = $template;
         $fixture->calendar_id = Calendar::where('kickoff', 'like', $request->date.'%')->value('id');
         $fixture->save();
 
-        return view('create', [
+        return view('admin.template-create', [
             'template' => $template,
             'next_games' => Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->get()
             

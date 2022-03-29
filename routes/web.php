@@ -1,13 +1,11 @@
 <?php
 
-use App\Enums\Location;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\clubController;
 use App\Http\Controllers\FixtureController;
 use App\Http\Controllers\Head2headController;
 use App\Http\Controllers\ScorerController;
 use App\Http\Controllers\StandingController;
-use App\Models\Calendar;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,15 +23,12 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    
-    Route::get('/lists', [FixtureController::class, 'index'])->name('lists');
-    Route::get('/lists/{fixture}', [FixtureController::class, 'show'])->name('show');
-    Route::get('/create',  [FixtureController::class, 'create'])->name('create');
-    Route::post('/generate',  [FixtureController::class, 'store'])->name('generate');
-    /**
-     * TODO :: Ajouter middleware group -> admin
-     */
     Route::prefix('admin')->group(function () {
+        Route::get('/create',  [FixtureController::class, 'create'])->name('template_create');
+        Route::post('/generate',  [FixtureController::class, 'store'])->name('template_generate');
+        Route::get('/lists', [FixtureController::class, 'index'])->name('template_lists');
+        Route::get('/lists/{fixture}', [FixtureController::class, 'show'])->name('show');
+
         Route::get('/standings', [StandingController::class, 'index'])->name('standings');
         Route::get('/standings/{location}', [StandingController::class, 'show'])->name('show_standing');
         Route::patch('/standings', [StandingController::class, 'update'])->name('update_standing');  
@@ -50,10 +45,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/clubs', [clubController::class, 'index'])->name('admin_clubs');
         Route::get('/clubs/import', [clubController::class, 'import'])->name('admin_clubs_import');
     });
-});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
 
 require __DIR__.'/auth.php';

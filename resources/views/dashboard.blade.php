@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-layout.sub-navigation.title title="Dashboard : ">
+        <x-layout.sub-navigation.title title="Dashboard ">
         </x-layout-subnavigation.title>
     </x-slot>
 

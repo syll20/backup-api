@@ -1,4 +1,4 @@
-<tr class="odd:bg-red-500 even:bg-gray-400 divide-y divide-red-500">
+<tr class="odd:bg-gray-100 even:bg-gray-200 divide-y divide-red-500">
     <td>{{ $calendar->label }}</td>
     <td>
         <form method="post" action="/admin/calendars" >

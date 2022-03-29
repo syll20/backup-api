@@ -1,6 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <x-layout.sub-navigation.title title="Create a template : ">
+            <x-layout.sub-navigation.link href="{{route('template_lists')}}" name="All" />
+            <x-layout.sub-navigation.link href="{{route('template_create')}}" name="Create a template" />
         </x-layout-subnavigation.title>
     </x-slot>
         <x-layout.main>
@@ -26,7 +28,7 @@
                             {{ $template }}
                         </textarea>
                         @endif
-                        <form method="POST" action="/generate">
+                        <form method="POST" action="/admin/generate">
                             @csrf
                             <input type=hidden name="team" value="94" />
                             <select name="date" id="game_date" required>

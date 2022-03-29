@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-layout.sub-navigation.title title="Standings {{$location}} : ">
+        <x-layout.sub-navigation.title title="Standings {{$location}} ">
         </x-layout-subnavigation.title>
     </x-slot>
 
@@ -15,7 +15,7 @@
                         <x-table.standing-input-row :ranking="$ranking" />   
                     @endforeach
                 </x-table-standing-table>
-                <input type="submit" value="Update {{$location}} ranking" class="mt-6 mb-20 bg-black text-red-600" />
+                <input type="submit" value="Update {{$location}} ranking" class="mt-6 mb-20 bg-red-500 text-black" />
             </form>
         </div>
     </x-layout.main>

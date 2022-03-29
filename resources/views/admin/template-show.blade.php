@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-layout.sub-navigation.title title="{{ __('Generated template for') }}: {{ $fixture->calendar->label }}">
-            <x-layout.sub-navigation.link href="/admin/clubs" name="All" />
-            <x-layout.sub-navigation.link href="/admin/clubs/import" name="Import" />
+        <x-layout.sub-navigation.title title="{{ __('Generated template for') }}: {{ $fixture->calendar->label }} -">
+        <x-layout.sub-navigation.link href="{{route('template_lists')}}" name="All" />
+            <x-layout.sub-navigation.link href="{{route('template_create')}}" name="Create a template" />
         </x-layout-subnavigation.title>
         <h2 class="font-semibold text-xl text-white leading-tight">
         </h2>
