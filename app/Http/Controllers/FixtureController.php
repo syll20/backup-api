@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-//require_once __DIR__.'/../../../vendor/autoload.php';
-
 use App\Http\Requests\StoreFixtureRequest;
 use App\Models\Calendar;
 use App\Models\Fixture;
@@ -31,7 +29,7 @@ class FixtureController extends Controller
     public function create()
     {     
         return view('admin.template-create', [
-            'next_games' => Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->get()
+            'next_games' => Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->limit(3)->get()
         ]);
     }
 
@@ -41,7 +39,7 @@ class FixtureController extends Controller
         
         if( ($template = $central->handle()) === null)
         {
-            return redirect('/create')
+            return redirect('/admin/create')
                 ->withErrors("There is no fixture that day ($request->date)");
         }
 

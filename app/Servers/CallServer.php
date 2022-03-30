@@ -10,18 +10,12 @@ use Illuminate\Support\Facades\Http;
  */
 class CallServer
 {
-
-    public function __construct(SoccerDataApiInterface $soccerDataApi)
+    public function handle(string $endpoint, SoccerDataApiInterface $soccerDataApi)
     {
-        $this->soccerDataApi = $soccerDataApi;
-    }
-
-    public function handle(string $endpoint)
-    {
-        $url = filter_var($this->soccerDataApi->baseUrl . $endpoint, FILTER_SANITIZE_URL);
+        $url = filter_var($soccerDataApi->baseUrl . $endpoint, FILTER_SANITIZE_URL);
 
         $data = Http::acceptJson()
-            ->withHeaders($this->soccerDataApi->getAuthKeys())
+            ->withHeaders($soccerDataApi->getAuthKeys())
             ->get($url);
    
         $data = json_decode(json_encode($data['response']), FALSE);

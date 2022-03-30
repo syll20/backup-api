@@ -15,7 +15,26 @@ class SoccerDataApiServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('callserver', function() {
+            return new \App\Servers\CallServer;
+        });
+
+        $this->app->bind('fixture', function() {
+            return new \App\Actions\Fixture;
+        });
+
+        $this->app->bind('injury', function() {
+            return new \App\Actions\Injury;
+        });
+        $this->app->bind('scorer', function() {
+            return new \App\Actions\Scorer;
+        });
+        $this->app->bind('h2h', function() {
+            return new \App\Actions\H2h;
+        });
+        $this->app->bind('ranking', function() {
+            return new \App\Actions\Ranking;
+        });
     }
 
     /**

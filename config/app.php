@@ -194,7 +194,13 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Goutte' => Weidner\Goutte\GoutteFacade::class
+        'Goutte' => Weidner\Goutte\GoutteFacade::class,
+        'CallServer' => App\Facades\CallServer::class,
+        'Fixture' => App\Facades\Fixture::class,
+        'Injury' => App\Facades\Injury::class,
+        'Scorer' => App\Facades\Scorer::class,
+        'H2h' => App\Facades\H2h::class,
+        'Ranking' => App\Facades\Ranking::class,
     ])->toArray(),
 
 ];

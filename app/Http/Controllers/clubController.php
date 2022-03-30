@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\SoccerDataApiInterface;
+use App\Facades\CallServer;
 use App\Models\Club;
-use App\Servers\CallServer;
+
 
 class clubController extends Controller
 {
@@ -22,7 +23,7 @@ class clubController extends Controller
         return view('admin.club-list');
     }
 
-    public function import(SoccerDataApiInterface $soccerDataApi, CallServer $callServer)
+    public function import(SoccerDataApiInterface $soccerDataApi)
     {
         $league = $soccerDataApi->league;
         $season = $soccerDataApi->season;
@@ -32,7 +33,7 @@ class clubController extends Controller
             $season
         );
 
-        $teams = $callServer->handle($endpoint);
+        $teams = CallServer::handle($endpoint, $soccerDataApi);
 
         foreach($teams as $team)
         {

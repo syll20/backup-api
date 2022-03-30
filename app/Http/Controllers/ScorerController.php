@@ -13,6 +13,6 @@ class ScorerController extends Controller
 
         Scorer::find($request->id)->update([$request->location => $request->goal]);
 
-        return redirect('/admin/standings')->with('success', 'Standings updated');
+        return redirect('/admin/standings')->with('success', 'Scorers updated');
     }
 }
