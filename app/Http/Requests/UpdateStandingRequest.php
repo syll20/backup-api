@@ -4,8 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
-use Location;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateStandingRequest extends FormRequest
 {
@@ -16,7 +15,7 @@ class UpdateStandingRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**

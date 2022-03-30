@@ -26,12 +26,15 @@ class SoccerDataApiServiceProvider extends ServiceProvider
         $this->app->bind('injury', function() {
             return new \App\Actions\Injury;
         });
+
         $this->app->bind('scorer', function() {
             return new \App\Actions\Scorer;
         });
+        
         $this->app->bind('h2h', function() {
             return new \App\Actions\H2h;
         });
+        
         $this->app->bind('ranking', function() {
             return new \App\Actions\Ranking;
         });
@@ -50,11 +53,6 @@ class SoccerDataApiServiceProvider extends ServiceProvider
 
             return new $server_config['namespace']($server_config);
         });
-/*
-        $this->app->bind(Standing::class, function ($app) {
-            var_dump('BIND STANDING CLASSES');
-            return new GeneralStanding;
-        });*/
     }
 
     

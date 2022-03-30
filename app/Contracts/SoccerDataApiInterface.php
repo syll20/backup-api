@@ -5,15 +5,6 @@ namespace App\Contracts;
 interface SoccerDataApiInterface
 {
 
-  //private $auth_key;
-  //private $auth_value;
-
-/*
-  function __construct(App $app)
-  {
-      $this->app = $app;
-  }
-*/
   public function __construct(array $provider);
 
   public function getAuthKeys(): array;

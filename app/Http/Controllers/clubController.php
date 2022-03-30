@@ -6,12 +6,10 @@ use App\Contracts\SoccerDataApiInterface;
 use App\Facades\CallServer;
 use App\Models\Club;
 
-
 class clubController extends Controller
 {
     public function index()
     {
-
         return view('admin.club-list', [
             'clubs' => Club::orderBy('name', 'ASC')->get()
         ]);
@@ -19,18 +17,14 @@ class clubController extends Controller
 
     public function create()
     {
-        // temp
         return view('admin.club-list');
     }
 
     public function import(SoccerDataApiInterface $soccerDataApi)
     {
-        $league = $soccerDataApi->league;
-        $season = $soccerDataApi->season;
-    
         $endpoint = $soccerDataApi->getTeamsByLeagueAndSeason(
-            $league, 
-            $season
+            $soccerDataApi->league, 
+            $soccerDataApi->season
         );
 
         $teams = CallServer::handle($endpoint, $soccerDataApi);

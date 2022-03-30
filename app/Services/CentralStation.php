@@ -21,7 +21,7 @@ class CentralStation
     public function __construct(StoreFixtureRequest $request, SoccerDataApiInterface $soccerDataApi)
     {
         $this->request = $request;
-        $this->request['season'] = '2021';
+        $this->request['season'] = $soccerDataApi->season;
         $this->placeholders = $request['placeholders'];
         $this->soccerDataApi = $soccerDataApi;
     }

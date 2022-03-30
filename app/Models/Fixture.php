@@ -9,8 +9,6 @@ class Fixture extends Model
 {
     use HasFactory;
 
-    
-
       /**
      * The attributes that are mass assignable.
      *
@@ -21,8 +19,6 @@ class Fixture extends Model
         'email',
         'password',
     ];
-
-
 
     public function user()
     {

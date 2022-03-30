@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\Location;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateScorerRequest extends FormRequest
 {
@@ -15,7 +16,7 @@ class UpdateScorerRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**

@@ -38,7 +38,6 @@ class ScorerComposer
         $home = $this->scorers->getAllOrderBy('home', 'desc');
         $away = $this->scorers->getAllOrderBy('away', 'desc');
         
-
         $view->with('homeScorers', $home)
             ->with('awayScorers', $away)
             ->with('totalScorers', $total);

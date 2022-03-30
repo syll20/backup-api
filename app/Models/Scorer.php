@@ -10,6 +10,7 @@ class Scorer extends Model
     use HasFactory;
 
     protected $fillable = ['total', 'home', 'away'];
+    
     /**
      * Specific for one team 
      */
@@ -19,7 +20,10 @@ class Scorer extends Model
             ->where([
                 ['club_id', '=', $fixtures->teams->$location->id],
                 [$location, '=', function($query) use ($location, $fixtures){
-                    $query->selectRaw("max($location)")->where('club_id', '=', $fixtures->teams->$location->id)->from('scorers');
+                    $query->
+                        selectRaw("max($location)")->
+                        where('club_id', '=', $fixtures->teams->$location->id)->
+                        from('scorers');
                 }]
             ])->get();
     }

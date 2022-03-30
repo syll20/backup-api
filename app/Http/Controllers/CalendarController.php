@@ -15,7 +15,7 @@ class CalendarController extends Controller
 
     public function update(UpdateCalendarRequest $request)
     {
-        $calendar = Calendar::find($request->id)->update(['kickoff' => $request->kickoff]);
+        Calendar::find($request->id)->update(['kickoff' => $request->kickoff]);
 
         return redirect('/admin/calendars')->with('success', 'Calendars updated');
     }

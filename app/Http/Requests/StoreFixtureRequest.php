@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\GameDate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,7 +28,6 @@ class StoreFixtureRequest extends FormRequest
             'date' => [
                 'required', 
                 'date_format:"Y-m-d"',
-                //new GameDate
             ],
         ];
     }

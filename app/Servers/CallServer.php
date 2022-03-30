@@ -5,9 +5,6 @@ namespace App\Servers;
 use App\Contracts\SoccerDataApiInterface;
 use Illuminate\Support\Facades\Http;
 
-/**
- * Setup the query for api-football.com API
- */
 class CallServer
 {
     public function handle(string $endpoint, SoccerDataApiInterface $soccerDataApi)

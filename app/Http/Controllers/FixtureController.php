@@ -9,8 +9,6 @@ use App\Services\CentralStation;
 
 class FixtureController extends Controller
 {
-    protected $auth;
-
     public function index()
     {
         return view('admin.fixture-list', [
@@ -52,7 +50,6 @@ class FixtureController extends Controller
         return view('admin.template-create', [
             'template' => $template,
             'next_games' => Calendar::where('kickoff', '>', date('Y-m-d H:i:s'))->get()
-            
         ]);
     }
 }

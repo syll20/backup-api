@@ -32,7 +32,7 @@ class StandingController extends Controller
 
         foreach($validated['ranking'] as $ranking)
         {
-            $team = Standing::
+            Standing::
                 where('id', $ranking['id'])->
                 where('club_id', $ranking['club_id'])->
                 update($ranking);

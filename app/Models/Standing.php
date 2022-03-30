@@ -9,7 +9,6 @@ class Standing extends Model
 {
     use HasFactory;
 
-
     public function scopeRankings($query, string $location)
     {
         return $this
