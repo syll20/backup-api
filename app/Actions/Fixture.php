@@ -27,8 +27,6 @@ class Fixture
         }
 
         $endpoint = $soccerDataApi->getFixturesByMixedFilters($filters);
-        
-        //$tmp = $this->callServer();
 
         $tmp = CallServer::handle($endpoint, $soccerDataApi);
 

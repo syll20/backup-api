@@ -9,11 +9,6 @@ class H2h
 {
     protected $fixtures;
 
-    protected function getLocation($fixtures)
-    {
-        return $fixtures->teams->home->id == 94 ? 'away' : 'home';
-    }
-
     public function stats($fixtures)
     {
         $templateStats = $this->getTemplateStats();
@@ -44,8 +39,8 @@ class H2h
     public function last5Games($fixtures)
     {
         $template = "";
-        $last5 = $this->getTemplateLast5Games();
-        //$location = $fixtures->teams->home->id == 94 ? 'away' : 'home';
+        $last5BaseTemplate = $this->getTemplateLast5Games();
+
         $location = $this->getLocation($fixtures);
 
         $games = Head2head::byLocation($fixtures->teams->$location->id, $location, 5);
@@ -109,11 +104,16 @@ class H2h
                     $awayTeam,
                     $game->competition
                 ], 
-                $last5
+                $last5BaseTemplate
             );
         }
 
         return $template;
+    }
+
+    protected function getLocation($fixtures)
+    {
+        return $fixtures->teams->home->id == 94 ? 'away' : 'home';
     }
 
     private function getTemplateStats()

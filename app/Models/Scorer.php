@@ -16,7 +16,7 @@ class Scorer extends Model
      */
     public function scopeBest($query, string $location, $fixtures)
     {
-        return $this
+        return $query
             ->where([
                 ['club_id', '=', $fixtures->teams->$location->id],
                 [$location, '=', function($query) use ($location, $fixtures){
