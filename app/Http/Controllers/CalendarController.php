@@ -10,7 +10,9 @@ class CalendarController extends Controller
 {  
     public function index()
     {
-        return view('admin.calendar-list', ['calendars' => Calendar::orderBy('kickoff', 'asc')->get()]);
+        return view('admin.calendar-list', [
+            'calendars' => Calendar::orderBy('kickoff', 'asc')->get()
+        ]);
     }
 
     public function update(UpdateCalendarRequest $request)

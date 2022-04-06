@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
     <x-layout.sub-navigation.title title="Next games for Stade Rennais ">
-        </x-layout-subnavigation.title>
+    </x-layout-subnavigation.title>
     </x-slot> 
 
     <x-layout.main>

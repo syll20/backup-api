@@ -1,6 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <x-layout.sub-navigation.title title="Head to head : ">
+            <x-layout.sub-navigation.link href="/admin/h2h" name="List" />
+            <x-layout.sub-navigation.link href="/admin/h2h" name="Import" />
+            <x-layout.sub-navigation.link href="/admin/h2h/fixtures" name="Add" />
         </x-layout-subnavigation.title>
     </x-slot>
  

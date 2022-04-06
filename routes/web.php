@@ -39,8 +39,12 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/calendars', [CalendarController::class, 'update'])->name('admin_update_calendars');
 
         Route::get('/h2h', [Head2headController::class, 'index'])->name('admin_h2h');
-        Route::post('/h2h/import', [Head2headController::class, 'store'])->name('admin_h2h_import');
         Route::get('/h2h/show', [Head2headController::class, 'show'])->name('admin_h2h_show');
+        Route::post('/h2h/import', [Head2headController::class, 'store'])->name('admin_h2h_import');
+        
+        Route::get('/h2h/fixtures', [Head2headController::class, 'fixtures'])->name('admin_h2h_fixtures');
+        Route::post('/h2h/add', [Head2headController::class, 'add'])->name('admin_h2h_add');
+        
 
         Route::get('/clubs', [clubController::class, 'index'])->name('admin_clubs');
         Route::get('/clubs/import', [clubController::class, 'import'])->name('admin_clubs_import');
