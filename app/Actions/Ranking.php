@@ -49,7 +49,11 @@ class Ranking
     
     public function teamLast5($location)
     {
-        return $this->standingsDB($location, 'last5');
+        return str_replace(
+            ['W', 'D', 'L'],
+            ['V', 'N', 'D'],
+            $this->standingsDB($location, 'last5')
+        );
     }
 
 

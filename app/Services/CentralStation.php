@@ -85,6 +85,17 @@ class CentralStation
         return Fixture::teamLogo('away');
     }
 
+    protected function homeTeamName()
+    {
+        return Fixture::teamName('home'); 
+    }
+
+    protected function awayTeamName()
+    {
+        return Fixture::teamName('away');
+    }
+    
+
     protected function mainReferee()
     {
         return Fixture::mainReferee();

@@ -54,10 +54,13 @@
 
                                 <div><input type="checkbox" name="placeholders[]" value="home_team_logo" checked /> %home_team_logo</div>
                                 <div><input type="checkbox" name="placeholders[]" value="away_team_logo" checked /> %away_team_logo</div>
-                                <div class="col-span-2"><input type="checkbox" name="placeholders[]" value="main_referee" checked /> %main_referee</div>
+                                <div><input type="checkbox" name="placeholders[]" value="home_team_name" checked /> %home_team_name</div>
+                                <div><input type="checkbox" name="placeholders[]" value="away_team_name" checked /> %away_team_name</div>
+
+                                <div><input type="checkbox" name="placeholders[]" value="main_referee" checked /> %main_referee</div>
                             
                                 <div><input type="checkbox" name="placeholders[]" value="home_team_injuries" checked /> %home_team_injuries</div>
-                                <div class="col-span-3"><input type="checkbox" name="placeholders[]" value="away_team_injuries" checked /> %away_team_injuries</div>
+                                <div ><input type="checkbox" name="placeholders[]" value="away_team_injuries" checked /> %away_team_injuries</div>
                                 
                                 <div><input type="checkbox" name="placeholders[]" value="general_home_ranking" checked /> %general_home_ranking</div>
                                 <div><input type="checkbox" name="placeholders[]" value="general_away_ranking" checked /> %general_away_ranking</div>

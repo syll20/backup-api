@@ -73,6 +73,11 @@ class Fixture
         return $this->fixtures->teams->$location->logo;
     }
 
+    public function teamName($location = 'home')
+    {
+        return $this->fixtures->teams->$location->name;
+    }
+
     public function mainReferee()
     {
         return $this->fixtures->fixture->referee;
