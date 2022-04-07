@@ -1,1 +1,1 @@
-<a href="{{$href}}">{{ __($name) }}</a> - 
+<a class="hover:bg-gray-500" href="{{$href}}">{{ __($name) }}</a> - 

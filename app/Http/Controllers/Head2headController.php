@@ -67,7 +67,7 @@ class Head2headController extends Controller
             }
 
             /**
-             * Date format 
+             * Date format to Y-m-d
              */
             $gameDate = $this->formatImportDate($data[0]);
             

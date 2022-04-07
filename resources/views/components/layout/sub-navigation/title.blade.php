@@ -1,4 +1,4 @@
-<h2 class="font-semibold text-md  leading-tight">
+<h3 class="font-semibold text-md  leading-tight">
     {{ __( $title ) }} 
     {{$slot}}
-</h2>
+</h3>

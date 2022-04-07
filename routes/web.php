@@ -31,7 +31,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/standings', [StandingController::class, 'index'])->name('standings');
         Route::get('/standings/{location}', [StandingController::class, 'show'])->name('show_standing');
-        Route::patch('/standings', [StandingController::class, 'update'])->name('update_standing');  
+        Route::patch('/standings', [StandingController::class, 'update'])->name('update_standing');
+        Route::get('/standings/fixtures/show', [StandingController::class, 'fixtures'])->name('admin_standing_fixture');
+        Route::put('/standings/update', [StandingController::class, 'autoUpdate'])->name('admin_standing_auto_update');
 
         Route::patch('/scorer', [ScorerController::class, 'update'])->name('admin_update_scorers');
 
