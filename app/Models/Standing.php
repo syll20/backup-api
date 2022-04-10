@@ -13,7 +13,7 @@ class Standing extends Model
     public function scopeRankings($query, Location $location)
     {
         return $this
-            ->where('location', $location)
+            ->where('location', $location->value)
             ->orderBy('points', 'DESC')
             ->orderBy('goals_diff', 'desc')
             ->orderBy('goals_for', 'desc')

@@ -26,7 +26,7 @@ class StandingController extends Controller
     public function show(Location $location)
     {
         return view('admin.standings_location', [
-            'rankings' => Standing::rankings($location),
+            'rankings' => Standing::rankings($location->value),
             'location' => $location->value
         ]);
     }
@@ -89,7 +89,7 @@ class StandingController extends Controller
 
     protected function updateTeamRank(Location $location)
     {
-        $teams = Standing::where('location', '=', $location)
+        $teams = Standing::where('location', '=', $location->value)
             ->orderBy('points', 'desc')
             ->orderBy('goals_diff', 'desc')
             ->orderBy('win', 'desc')
@@ -101,22 +101,22 @@ class StandingController extends Controller
         foreach($teams as $team)
         {
             $team->rank = ++$rank;
-            //$team->save();
+            $team->save();
         }
     }
 
     protected function updateTeamStats($roundFixture, Location $teamLocation, Location $opponentLocation)
     {
-        $team = Standing::where('club_id', '=', $roundFixture->teams->$teamLocation->id)
-            ->where('location', '=', $teamLocation)
+        $team = Standing::where('club_id', '=', $roundFixture->teams->{$teamLocation->value}->id)
+            ->where('location', '=', $teamLocation->value)
             ->first();
 
-        if($roundFixture->teams->$teamLocation->winner === true){
+        if($roundFixture->teams->{$teamLocation->value}->winner === true){
             $team->points += 3;
             $team->win += 1;
             $team->last5 = Str::padLeft($team->last5, 6, 'W' );
 
-        }else if($roundFixture->teams->$teamLocation->winner === false){
+        }else if($roundFixture->teams->{$teamLocation->value}->winner === false){
             $team->lose += 1;
             $team->last5 = Str::padLeft($team->last5, 6, 'L' );
 
@@ -127,12 +127,12 @@ class StandingController extends Controller
         }
 
         $team->played += 1;
-        $team->goals_for += $roundFixture->goals->$teamLocation;
-        $team->goals_against += $roundFixture->goals->$opponentLocation;
+        $team->goals_for += $roundFixture->goals->{$teamLocation->value};
+        $team->goals_against += $roundFixture->goals->{$opponentLocation->value};
         $team->goals_diff = $team->goals_for - $team->goals_against;
         $team->last5 = Str::substr($team->last5, 0, 5);
 
-        dd($team);
-        // $team->save();
+        //dd($team);
+         $team->save();
     }
 }

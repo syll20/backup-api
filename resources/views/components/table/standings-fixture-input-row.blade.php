@@ -7,7 +7,7 @@
             @csrf
             @method('PUT')
             <input type="hidden" id="fixture" name="fixture" value="{{ $calendar->fixture }}" />
-            <input type="submit" value="update h2h" />
+            <input type="submit" value="update standings" />
         </form>
     </td>
 </tr>
