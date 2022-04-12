@@ -29,8 +29,8 @@ return [
             'club_id' => env('API_FOOTBALL_CLUB', 94), 
             'namespace' => 'App\Servers\ApiFootballComV3',
             'base_url' => 'https://v3.football.api-sports.io',
-            'auth_key_name' => env('API_FOOTBALL_KEY_NAME', 'x-apisports-key'),
-            'auth_key_value' => env('API_FOOTBALL_KEY_VALUE', 'fdf1ff3c4f0ddfa001f0e3b223c9ce80'),
+            'auth_key_name' => env('API_FOOTBALL_KEY_NAME'),
+            'auth_key_value' => env('API_FOOTBALL_KEY_VALUE'),
         ],
 
         /*        

@@ -17,6 +17,7 @@ class Calendar extends Model
     protected $fillable = [
         'label',
         'kickoff',
+        'fixture',
     ];
 
     public function fixtures()

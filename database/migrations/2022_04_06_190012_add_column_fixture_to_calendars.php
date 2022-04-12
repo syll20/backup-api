@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('calendars', function (Blueprint $table) {
-            $table->integer('fixture');
+            $table->integer('fixture')->nullable();
         });
     }
 
