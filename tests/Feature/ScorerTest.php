@@ -82,6 +82,5 @@ class ScorerTest extends TestCase
             'id' => $scorer->id,
             $location => ($goals +1)
         ]);
-
     }
 }
