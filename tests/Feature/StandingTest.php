@@ -3,29 +3,24 @@
 namespace Tests\Feature;
 
 use App\Enums\Location;
-use App\Models\Scorer;
+use App\Models\Standing;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class ScorerTest extends TestCase
+class StandingTest extends TestCase
 {
     use RefreshDatabase;
-    
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_can_not_access_admin_scorer_page_if_not_connected()
+
+    public function test_can_not_access_admin_standing_page_if_not_connected()
     {
         $response = $this->get('/admin/standings');
         $response->assertStatus(302);
     }
 
     
-    public function test_auth_user_can_access_admin_scorers()
+    public function test_auth_user_can_access_admin_standing()
     {
         $user = User::factory()->create();
 
@@ -39,21 +34,35 @@ class ScorerTest extends TestCase
     }
 
 
-    public function test_auth_user_can_update_total_goals_for_a_player()
+    public function test_auth_user_can_access_admin_standing_home()
     {
-        $this->update_goals(Location::Total);
+        $this->auth_user_can_access_admin_standing_by_location(Location::Home);
     }
 
 
-    public function test_auth_user_can_update_home_goals_for_a_player()
+    public function test_auth_user_can_access_admin_standing_away()
     {
-        $this->update_goals(Location::Home);
+        $this->auth_user_can_access_admin_standing_by_location(Location::Away);
     }
 
 
-    public function test_auth_user_can_update_away_goals_for_a_player()
+    /*public function test_auth_user_can_access_admin_standing_total()
     {
-        $this->update_goals(Location::Away);
+        $this->auth_user_can_access_admin_standing_by_location(Location::Total);
+    }*/
+
+
+    protected function auth_user_can_access_admin_standing_by_location(Location $location)
+    {
+        $user = User::factory()->create();
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $response = $this->get('/admin/standings/' . $location->value);
+        $response->assertSeeText("Standings {$location->value}");
     }
 
 
@@ -67,12 +76,14 @@ class ScorerTest extends TestCase
             'password' => 'password',
         ]);
 
-        $scorer = Scorer::factory()->create();
+        for($i = 0; $i <= 19; $i++){
+            $standing = Standing::factory()->create();
+        }
 
-        $goals = $scorer->{$location->value};
+        $points = $standing->points;
 
         $response = $this->actingAs($user)
-            ->patch('/admin/scorer', [
+            ->patch('/admin/standings', [
                 'id' => $scorer->id,
                 'player_id' => $scorer->player_id,
                 'goal' => ($goals +1),

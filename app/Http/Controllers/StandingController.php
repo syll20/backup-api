@@ -26,7 +26,7 @@ class StandingController extends Controller
     public function show(Location $location)
     {
         return view('admin.standings_location', [
-            'rankings' => Standing::rankings($location->value),
+            'rankings' => Standing::rankings($location),
             'location' => $location->value
         ]);
     }
@@ -111,28 +111,45 @@ class StandingController extends Controller
             ->where('location', '=', $teamLocation->value)
             ->first();
 
+        $team->played += 1;
+
         if($roundFixture->teams->{$teamLocation->value}->winner === true){
             $team->points += 3;
             $team->win += 1;
-            $team->last5 = Str::padLeft($team->last5, 6, 'W' );
+            $team->last5 = $this->updateLast5($team, 'W');//Str::padLeft($team->last5, 6, 'W' );
 
         }else if($roundFixture->teams->{$teamLocation->value}->winner === false){
             $team->lose += 1;
-            $team->last5 = Str::padLeft($team->last5, 6, 'L' );
+            $team->last5 = $this->updateLast5($team, 'L'); //Str::padLeft($team->last5, 6, 'L' );
 
         }else{
             $team->points += 1;
             $team->draw += 1;
-            $team->last5 = Str::padLeft($team->last5, 6, 'D' );
+            $team->last5 = $this->updateLast5($team, 'D'); //Str::padLeft($team->last5, 6, 'D' );
         }
 
-        $team->played += 1;
         $team->goals_for += $roundFixture->goals->{$teamLocation->value};
         $team->goals_against += $roundFixture->goals->{$opponentLocation->value};
         $team->goals_diff = $team->goals_for - $team->goals_against;
-        $team->last5 = Str::substr($team->last5, 0, 5);
+        //$team->last5 = Str::substr($team->last5, 0, 5);
 
         //dd($team);
          $team->save();
+    }
+
+    /**
+     * Pad lastResult letter in the left 
+     *  then keep only the 5 first letters (remove the 6th and oldest one)
+     */
+    protected function updateLast5($team, $lastResult)
+    {
+        $nb = $team->played >= 5? 5 : $team->played;
+
+        return Str::substr(
+            Str::padLeft(
+                $team->last5, ($nb+1), $lastResult
+            ), 
+            0, $nb
+        );
     }
 }
