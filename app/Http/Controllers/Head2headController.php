@@ -56,7 +56,13 @@ class Head2headController extends Controller
         $website = $client->request('GET', $request->target);
         $website->filter('tr')->each(function($node) use ($request, $relation){
    
-            $data = explode(' ', $node->text());
+
+            // fix for space in team name... 
+            $tmp = str_replace('St Étienne', 'St-Étienne', $node->text());
+
+            $data = explode(' ', $tmp);
+
+
 
             /**
              * Validation
@@ -65,7 +71,7 @@ class Head2headController extends Controller
             {
                 return;
             }
-
+          
             /**
              * Date format to Y-m-d
              */
@@ -176,7 +182,7 @@ class Head2headController extends Controller
         return $relation;
     }
 
-    protected function importValidation($data, $club)
+    protected function  importValidation($data, $club)
     {
         $rennes = config('soccerdataapi.rennes');
 
